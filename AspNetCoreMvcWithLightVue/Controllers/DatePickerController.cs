@@ -8,5 +8,13 @@ namespace AspNetCoreMvcWithLightVue.Controllers
         {
             return View();
         }
+        public IActionResult Style1()
+        {
+            return View();
+        }
+        public IActionResult Style2()
+        {
+            return View();
+        }
     }
 }
