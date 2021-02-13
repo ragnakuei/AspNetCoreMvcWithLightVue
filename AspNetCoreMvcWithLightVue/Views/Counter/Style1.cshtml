@@ -5,15 +5,16 @@
 <div id="app"
      class="text-center"
      style="display: none">
-  <label>{{counter}}</label><br>
-  <button @@click="plusCounter" >Plus Counter</button>
+    <label>{{counter}}</label>
+    <br>
+    <button @@click="plusCounter">Plus Counter</button>
 </div>
 
 @section Scripts
 {
-  <script src="https://unpkg.com/vue@3.0.5/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue@next"></script>
 
-  <script>
+    <script>
       const RootComponent = {
         setup(){
           let counter = 0;
