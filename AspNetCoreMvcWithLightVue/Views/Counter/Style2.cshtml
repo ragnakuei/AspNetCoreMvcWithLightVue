@@ -14,7 +14,7 @@
   <script src="https://unpkg.com/vue@next"></script>
 
   <script>
-      const { createApp, ref } = Vue;
+      const { createApp, ref, watch } = Vue;
 
       const RootComponent = {
         setup(){
@@ -26,6 +26,11 @@
             // 加了之後，會反映至 Template 中
             counter.value ++;
           }
+
+          watch(counter, (newValue, oldValue) => {
+            console.log('oldValue' , oldValue);
+            console.log('newValue' , newValue);
+          })
 
           return {
             counter,

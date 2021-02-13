@@ -1,0 +1,55 @@
+﻿@{
+    ViewData["Date"] = "DatePicker Page";
+}
+
+<div id="app"
+     class="text-center"
+     style="display: none">
+  <label>App:{{counter}}</label><br>
+  <button @@click="plusCounter" >Plus Counter</button><br>
+  <child-counter></child-counter>
+</div>
+
+@section Scripts
+{
+  <script src="https://unpkg.com/vue@next"></script>
+
+  <script>
+      const { createApp, ref, provide, inject } = Vue;
+
+      const app = createApp({
+        setup(){
+          const counter = ref(0);
+
+          const plusCounter = function () {
+            console.log('plusCounter');
+            counter.value ++;
+          }
+
+          // 讓 child component 可以用 inject counter 來取得 counter 的值
+          provide('counter', counter);
+
+          return {
+            counter,
+            plusCounter,
+          }
+        },
+      });
+
+      app.component("child-counter", {
+        setup(){
+
+          // inject counter 來取得 counter 的值
+          const counter = inject('counter');
+
+          return {
+            counter
+          }
+        },
+        template: `<label>Child:{{counter}}</label><br>`,
+      });
+
+      const vm = app.mount('#app');
+      document.getElementById("app").style.display = "block";
+    </script>
+}
