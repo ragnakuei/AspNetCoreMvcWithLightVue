@@ -12,6 +12,16 @@ namespace AspNetCoreMvcWithLightVue.Controllers
             return View();
         }
 
+        public IActionResult Style1()
+        {
+            return View();
+        }
+
+        public IActionResult Style2()
+        {
+            return View();
+        }
+
         private readonly Dto[] _data = new[]
                                        {
                                            new Dto { Id = 1, Name   = "Name001", Age = 21, },
