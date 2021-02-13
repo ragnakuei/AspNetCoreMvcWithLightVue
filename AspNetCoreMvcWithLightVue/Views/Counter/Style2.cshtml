@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Date"] = "DatePicker Page";
+}
+
+<div id="app"
+     class="text-center"
+     style="display: none">
+  <label>{{counter}}</label><br>
+  <button @@click="plusCounter" >Plus Counter</button>
+</div>
+
+@section Scripts
+{
+  <script src="https://unpkg.com/vue@3.0.5/dist/vue.global.js"></script>
+
+  <script>
+      const { createApp, ref } = Vue;
+
+      const RootComponent = {
+        setup(){
+          const counter = ref(0);
+
+          const plusCounter = function () {
+            console.log('plusCounter');
+
+            // 加了之後，會反映至 Template 中
+            counter.value ++;
+          }
+
+          return {
+            counter,
+            plusCounter,
+          }
+        },
+      };
+
+      const app = createApp(RootComponent);
+
+      const vm = app.mount('#app');
+      document.getElementById("app").style.display = "block";
+    </script>
+}
