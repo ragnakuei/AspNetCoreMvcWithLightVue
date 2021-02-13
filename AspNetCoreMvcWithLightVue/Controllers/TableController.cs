@@ -132,22 +132,27 @@ namespace AspNetCoreMvcWithLightVue.Controllers
             pageInfoDto.DataCount = _data.Length;
 
             // 前端排序整理
-            if (pageInfoDto.SortColumn == pageInfoDto.ClickSortColumn)
+            if (string.IsNullOrWhiteSpace(pageInfoDto.ClickSortColumn) == false)
             {
-                if (pageInfoDto.SortColumnOrder == SortColumnOrder.Asc)
+                if (pageInfoDto.SortColumn == pageInfoDto.ClickSortColumn)
                 {
-                    pageInfoDto.SortColumnOrder = SortColumnOrder.Desc;
+                    if (pageInfoDto.SortColumnOrder == SortColumnOrder.Asc)
+                    {
+                        pageInfoDto.SortColumnOrder = SortColumnOrder.Desc;
+                    }
+                    else
+                    {
+                        pageInfoDto.SortColumnOrder = SortColumnOrder.Asc;
+                    }
                 }
                 else
                 {
+                    pageInfoDto.SortColumn      = pageInfoDto.ClickSortColumn;
                     pageInfoDto.SortColumnOrder = SortColumnOrder.Asc;
                 }
             }
-            else
-            {
-                pageInfoDto.SortColumn      = pageInfoDto.ClickSortColumn;
-                pageInfoDto.SortColumnOrder = SortColumnOrder.Asc;
-            }
+
+            pageInfoDto.ClickSortColumn = string.Empty;
 
 
             IEnumerable<Dto> result = _data;

@@ -35,7 +35,10 @@
         setup(props, { emit }){
 
           onMounted(() => {
-            $( "#datepicker" ).datepicker({
+            // 此時已處理 template 的部份，所以在這給定 $( "#datepicker" )
+            datePickerDom = $( "#datepicker" );
+
+            datePickerDom.datepicker({
               dateFormat : "yy/mm/dd",
               onSelect: function (dateText, inst) {
                   selectDate.value = dateText;
@@ -43,12 +46,16 @@
             });
           })
 
+          // 此時尚未處理 template 的部份，所以無法在這給定 $( "#datepicker" )
+          let datePickerDom = null;
+
           const selectDate = computed({
                  get : () => props.modelValue,
                  set : (v) => emit('update:modelValue', v),
                });
 
           return {
+            datePickerDom,
             selectDate
           }
         },
