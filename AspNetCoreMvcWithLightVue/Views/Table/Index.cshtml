@@ -66,18 +66,25 @@
       const app = Vue.createApp(RootComponent);
 
       app.component("data-table", {
-        data() {
-          return {
-            columns : [
-              { columnEngName : 'Id', columnChnName : 'ID'},
-              { columnEngName : 'Name', columnChnName : '姓名'},
-              { columnEngName : 'Age', columnChnName : '年齡'},
-            ]
-          }
-        },
         props:{
           data_items : null,
           page_info : null,
+        },
+        setup() {
+          const columns = [
+                            { columnEngName : 'Id', columnChnName : 'ID'},
+                            { columnEngName : 'Name', columnChnName : '姓名'},
+                            { columnEngName : 'Age', columnChnName : '年齡'},
+                          ];
+
+          const sort = function(columnName) {
+                         this.$emit('sort_column', columnName);
+                       }
+
+          return {
+            columns,
+            sort,
+          };
         },
         template: `
 <table class="table" >
@@ -101,12 +108,7 @@
     </tr>
   </tbody>
 </table>
-`,
-        methods : {
-          sort(columnName){
-            this.$emit('sort_column', columnName);
-          }
-        }
+`
       });
 
       app.component("sort-icon", {

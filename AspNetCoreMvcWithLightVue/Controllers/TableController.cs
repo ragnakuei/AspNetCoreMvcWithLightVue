@@ -150,10 +150,9 @@ namespace AspNetCoreMvcWithLightVue.Controllers
                     pageInfoDto.SortColumn      = pageInfoDto.ClickSortColumn;
                     pageInfoDto.SortColumnOrder = SortColumnOrder.Asc;
                 }
+
+                pageInfoDto.ClickSortColumn = string.Empty;
             }
-
-            pageInfoDto.ClickSortColumn = string.Empty;
-
 
             IEnumerable<Dto> result = _data;
 
