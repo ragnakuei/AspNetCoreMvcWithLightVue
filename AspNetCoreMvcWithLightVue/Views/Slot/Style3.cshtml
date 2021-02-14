@@ -36,12 +36,12 @@
                 isShowDialogB.value = true;
             }
 
-            const CloseDialogA = function (isShow) {
-                isShowDialogA.value = isShow;
+            const CloseDialogA = function () {
+                isShowDialogA.value = false;
             }
 
-            const CloseDialogB = function (isShow) {
-                isShowDialogB.value = isShow;
+            const CloseDialogB = function () {
+                isShowDialogB.value = false;
             }
 
             return {
@@ -69,7 +69,7 @@
                                                       width: 'auto',
                                                       modal: true,
                                                       close: function (event, ui ) {
-                                                          emit('close_dialog', false);
+                                                          emit('close_dialog');
                                                       }
                                                     });
             });
