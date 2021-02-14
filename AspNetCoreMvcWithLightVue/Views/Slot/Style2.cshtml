@@ -1,90 +1,96 @@
 ﻿<div id="app"
      class="text-center"
      style="display: none">
-    <button class="btn btn-dark" @@click="toggleDialogA" >Toggle Dialog A</button>&nbsp
-    <button class="btn btn-dark" @@click="toggleDialogB" >Toggle Dialog B</button>
-    <jquery-ui-dialog v-model:hidden="isHiddenDialogA">A</jquery-ui-dialog>
-    <jquery-ui-dialog v-model:hidden="isHiddenDialogB">B</jquery-ui-dialog>
+    <button class="btn btn-dark" @@click="showDialogA" >Toggle Dialog A</button>&nbsp
+    <button class="btn btn-dark" @@click="showDialogB" >Toggle Dialog B</button><br>
+    <jquery-ui-dialog v-model:is_show="isShowDialogA"
+                      v-on:close_dialog="CloseDialogA">
+        A
+    </jquery-ui-dialog>
+    <jquery-ui-dialog v-model:is_show="isShowDialogB"
+                      v-on:close_dialog="CloseDialogB">
+        B
+    </jquery-ui-dialog>
 </div>
 
 @section Scripts
 {
-    <link rel="stylesheet"
-          href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script src="https://unpkg.com/vue@next"></script>
 
     <script>
-      const { createApp, computed, onMounted, ref } = Vue;
+      const { createApp, computed, onMounted, ref, watch } = Vue;
 
       const app = createApp({
         setup() {
-            const isHiddenDialogA = ref(true);
-            const isHiddenDialogB = ref(true);
+            const isShowDialogA = ref(false);
+            const isShowDialogB = ref(false);
 
-            const toggleDialogA = function (){
-                console.log('isHiddenDialogA', isHiddenDialogA.value);
-                isHiddenDialogA.value = !isHiddenDialogA.value;
+            const showDialogA = function () {
+                isShowDialogA.value = true;
             }
-            const toggleDialogB = function (){
-                console.log('isHiddenDialogB', isHiddenDialogB.value);
-                isHiddenDialogB.value = !isHiddenDialogB.value;
+
+            const showDialogB = function () {
+                isShowDialogB.value = true;
+            }
+
+            const CloseDialogA = function () {
+                isShowDialogA.value = false;
+            }
+
+            const CloseDialogB = function () {
+                isShowDialogB.value = false;
             }
 
             return {
-                isHiddenDialogA,
-                isHiddenDialogB,
-                toggleDialogA,
-                toggleDialogB,
+                isShowDialogA,
+                isShowDialogB,
+                showDialogA,
+                showDialogB,
+                CloseDialogA,
+                CloseDialogB,
             }
         }
       });
 
       app.component("jquery-ui-dialog", {
-          props: {
-              isHidden: Boolean,
+          props : {
+              is_show : null,
           },
-          setup(props) {
-            const dialogDom = ref(null);
+          setup(props, { emit }) {
 
-            const hidden = computed({
-                    get : () => props.isHidden,
-                    set : (v) => {
-                        console.log('jquery-ui-dialog computed hidden', v)
-                        if (v)
-                        {
-                            dialogDom.value.dialog("close");
-                        }
-                        else
-                        {
-                            dialogDom.value.dialog("open");
-                        }
-                        props.isHidden = v;
-                    },
-                });
+            const dialogDom = ref(null);
 
             onMounted(() => {
                 dialogDom.value = $('#dialog').dialog({
-                                                         autoOpen: false,
-                                                         width: 'auto',
-                                                         modal: true,
-                                                         close: function (event, ui )
-                                                         {
+                                                      autoOpen: false,
+                                                      width: 'auto',
+                                                      modal: true,
+                                                      close: function (event, ui ) {
+                                                          emit('close_dialog');
+                                                      }
+                                                    });
+            });
 
-                                                         }
-                                                       });
+            watch(() => props.is_show, (newValue, oldValue) => {
+              console.log('watch is_show', props.is_show);
+
+              if (newValue === true)
+              {
+                  dialogDom.value.dialog("open");
+              }
             });
 
             return {
-                dialogDom,
-                hidden,
             };
           },
         template: `
 <div id="dialog">
   <slot></slot>
-</div>`,
+</div>
+`,
       });
 
       const vm = app.mount('#app');
