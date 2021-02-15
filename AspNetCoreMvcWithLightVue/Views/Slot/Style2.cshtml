@@ -3,11 +3,11 @@
      style="display: none">
     <button class="btn btn-dark" @@click="showDialogA" >Toggle Dialog A</button>&nbsp
     <button class="btn btn-dark" @@click="showDialogB" >Toggle Dialog B</button><br>
-    <jquery-ui-dialog v-model:is_show="isShowDialogA"
+    <jquery-ui-dialog v-model:is_show_dialog="isShowDialogA"
                       v-on:close_dialog="CloseDialogA">
         A
     </jquery-ui-dialog>
-    <jquery-ui-dialog v-model:is_show="isShowDialogB"
+    <jquery-ui-dialog v-model:is_show_dialog="isShowDialogB"
                       v-on:close_dialog="CloseDialogB">
         B
     </jquery-ui-dialog>
@@ -15,7 +15,8 @@
 
 @section Scripts
 {
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet"
+          href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script src="https://unpkg.com/vue@next"></script>
@@ -30,19 +31,23 @@
 
             const showDialogA = function () {
                 isShowDialogA.value = true;
-            }
+            };
 
             const showDialogB = function () {
                 isShowDialogB.value = true;
-            }
+            };
 
             const CloseDialogA = function () {
                 isShowDialogA.value = false;
-            }
+
+                console.log('dialogA is closed');
+            };
 
             const CloseDialogB = function () {
                 isShowDialogB.value = false;
-            }
+
+                console.log('dialogB is closed');
+            };
 
             return {
                 isShowDialogA,
@@ -56,12 +61,19 @@
       });
 
       app.component("jquery-ui-dialog", {
-          props : {
-              is_show : null,
+          props: {
+            is_show_dialog: null,
           },
           setup(props, { emit }) {
 
             const dialogDom = ref(null);
+
+            watch(()=> props.is_show_dialog,
+                  (newValue, oldValue) => {
+                      if (newValue === true) {
+                          dialogDom.value.dialog("open");
+                      }
+                  });
 
             onMounted(() => {
                 dialogDom.value = $('#dialog').dialog({
@@ -72,15 +84,6 @@
                                                           emit('close_dialog');
                                                       }
                                                     });
-            });
-
-            watch(() => props.is_show, (newValue, oldValue) => {
-              console.log('watch is_show', props.is_show);
-
-              if (newValue === true)
-              {
-                  dialogDom.value.dialog("open");
-              }
             });
 
             return {

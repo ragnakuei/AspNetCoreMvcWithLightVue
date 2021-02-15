@@ -2,7 +2,7 @@
      class="text-center"
      style="display: none">
     <label>{{initialDate}}</label><br>
-    <jquery-ui-datepicker v-model="initialDate"></jquery-ui-datepicker>
+    <datepicker v-model="initialDate"></datepicker>
 </div>
 
 @section Scripts
@@ -10,17 +10,20 @@
   <script src="https://unpkg.com/vue@next"></script>
 
   <script>
-      const RootComponent = {
-        data() {
+      const { createApp, ref, onMounted, computed } = Vue;
+
+      const app = createApp({
+        setup(){
+
+          const initialDate = ref("2020-12-31");
+
           return {
-            initialDate: "2020-12-31",
-          };
-        },
-      };
+            initialDate
+          }
+        }
+      });
 
-      const app = Vue.createApp(RootComponent);
-
-      app.component("jquery-ui-datepicker", {
+      app.component("datepicker", {
         data() {
           return {
               datePickerDom : null,

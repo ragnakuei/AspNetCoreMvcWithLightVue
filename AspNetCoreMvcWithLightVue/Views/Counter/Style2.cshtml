@@ -17,10 +17,10 @@
           const counter = ref(0);
 
           const plusCounter = function () {
-            console.log('plusCounter');
-
             // 加了之後，會反映至 Template 中
             counter.value ++;
+
+            console.log('counter', counter.value);
           }
 
           watch(counter, (newValue, oldValue) => {

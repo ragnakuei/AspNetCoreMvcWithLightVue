@@ -14,11 +14,17 @@ namespace AspNetCoreMvcWithLightVue.Controllers
 
         public IActionResult Style1()
         {
+            // 手動刻 table + table column header 欄位排序
+            // 清單資料以 ref 來包裝
+            // 分頁列表以 jQuery UI select menu 來呈現
             return View();
         }
 
         public IActionResult Style2()
         {
+            // 手動刻 table + table column header 欄位排序
+            // 清單資料以 reactive 來包裝
+            // 分頁列表以 jQuery UI select menu 來呈現
             return View();
         }
 

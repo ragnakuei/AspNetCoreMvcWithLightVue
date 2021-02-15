@@ -16,10 +16,10 @@
           let counter = 0;
 
           const plusCounter = function () {
-            console.log('plusCounter');
-
             // 加了之後，不會反映至 Template 中
             counter ++;
+
+            console.log('counter', counter);
           }
 
           return {

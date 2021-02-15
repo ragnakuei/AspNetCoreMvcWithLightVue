@@ -18,8 +18,9 @@
           const counter = ref(0);
 
           const plusCounter = function () {
-            console.log('plusCounter');
             counter.value ++;
+
+            console.log('counter', counter.value);
           }
 
           // 讓 child component 可以用 inject counter 來取得 counter 的值
