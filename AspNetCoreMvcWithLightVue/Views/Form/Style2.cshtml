@@ -74,7 +74,8 @@
             }
 
             if (!validateErrors.value.Id
-             && !validateErrors.value.Name) {
+             && !validateErrors.value.Name
+             && !validateErrors.value.ProductId) {
               emit("submit-form", dto);
               return;
             }

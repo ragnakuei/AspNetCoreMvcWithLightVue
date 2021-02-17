@@ -19,6 +19,7 @@ namespace AspNetCoreMvcWithLightVue.Controllers
         public IActionResult Style2()
         {
             // 驗証 form + jQuery AutoComplete
+            // product 欄位輸入
             return View();
         }
 
