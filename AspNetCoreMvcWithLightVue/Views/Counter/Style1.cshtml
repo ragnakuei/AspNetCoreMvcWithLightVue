@@ -11,7 +11,9 @@
     <script src="https://unpkg.com/vue@next"></script>
 
     <script>
-      const RootComponent = {
+      const { createApp } = Vue;
+
+      const app = createApp({
         setup(){
           let counter = 0;
 
@@ -27,9 +29,7 @@
             plusCounter,
           }
         },
-      };
-
-      const app = Vue.createApp(RootComponent);
+      });
 
       const vm = app.mount('#app');
       document.getElementById("app").style.display = "block";

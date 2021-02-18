@@ -22,7 +22,7 @@
   <script>
       const { createApp, ref, onMounted, computed, reactive } = Vue;
 
-      const RootComponent = {
+      const app = createApp({
         setup() {
 
           const data_items = ref(null);
@@ -63,9 +63,7 @@
                to_page,
           }
         },
-      };
-
-      const app = Vue.createApp(RootComponent);
+      });
 
       app.component("data-table", {
         props:{
