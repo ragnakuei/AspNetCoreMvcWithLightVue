@@ -16,11 +16,8 @@
         setup(){
           const counter = ref(0);
 
-          const plusCounter = function () {
-            // 加了之後，會反映至 Template 中
+          function plusCounter() {
             counter.value ++;
-
-            console.log('counter', counter.value);
           }
 
           watch(counter, (newValue, oldValue) => {
