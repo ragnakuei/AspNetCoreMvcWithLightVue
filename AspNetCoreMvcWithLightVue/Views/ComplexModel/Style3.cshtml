@@ -94,17 +94,15 @@
     <script src="https://unpkg.com/vue@next"></script>
 
     <script>
-      window.viewModel = @Html.Raw(Model?.ToJson()) || {};
-      window.submitUrl = '@Url.Action("PostStyle3")';
-      window.redirectUrl = '@Url.Action("ShowStyle3")';
-      window.emptyCategory = @Html.Raw(ViewBag.EmptyCategoryJson);
-
       const { createApp, reactive } = Vue;
 
       const app = createApp({
 
           setup() {
-              const vm = reactive( viewModel );
+              const vm = reactive( @Html.Raw(Model?.ToJson()) );
+              const submitUrl = '@Url.Action("PostStyle3")';
+              const redirectUrl = '@Url.Action("ShowStyle3")';
+              const emptyCategory = @Html.Raw(ViewBag.EmptyCategoryJson);
 
               function AddNewCategory() {
                   vm.Categories.push(emptyCategory);
@@ -120,13 +118,12 @@
                   $.ajax({
                               url: submitUrl,
                               type: 'post',
-                              data: JSON.stringify( viewModel ),
+                              data: JSON.stringify( vm ),
                               dataType: 'json',
                               contentType: 'application/json',
                          })
                      .done((e) => { window.location.href = redirectUrl })
-                     .fail((res) => { console.log('error', res); });
-
+                     .fail((res) => { console.log('error', res); })
               }
 
               return {
