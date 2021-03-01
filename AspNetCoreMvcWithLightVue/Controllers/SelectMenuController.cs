@@ -55,7 +55,7 @@ namespace AspNetCoreMvcWithLightVue.Controllers
         public IActionResult Style1Result()
         {
             var vmJson = _contextAccessor.HttpContext.Session.GetString(_viewModelSessionKey);
-            var vm     = JsonSerializer.Deserialize<SelectMenuViewModel>(vmJson);
+            var vm     = vmJson.ParseJson<SelectMenuViewModel>();
 
             return View(vm);
         }

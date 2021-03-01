@@ -1,0 +1,112 @@
+﻿@model AspNetCoreMvcWithLightVue.Controllers.ComplexViewModel
+
+<h4>ComplexViewModel FormData 版</h4>
+<hr />
+<div>
+    <input type="button"
+           value="新增"
+           class="btn btn-primary"
+           style="margin: 5px;"
+           onclick="AddNewCategory()" />
+    <form asp-action="ShowStyle1"
+          autocomplete="off"
+          method="post">
+        <div id="categories">
+            @for (int i = 0; i < Model.Categories.Length; i++)
+            {
+                ViewBag.CategoryIndex = (int?)i;
+
+                <partial name="CategoryView" />
+                <br />
+            }
+        </div>
+        <div class="form-group">
+            <input type="submit"
+                   value="儲存"
+                   class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+@section Scripts
+{
+    <script>
+        window.categoryIndex = @Model.Categories.Length;
+
+        function AddNewCategory()
+        {
+            $.ajax({
+                        url: '@Url.Action("NewCategoryAndThreeItems")',
+                        type: 'post',
+                        data: { categoryIndex } ,
+                    })
+             .done(function(e) {
+
+                        $('#categories').append(e);
+
+                        window.categoryIndex++;
+                    })
+             .fail(function(res) {
+                        console.log('error', res);
+                    });
+        }
+
+        function DeleteTable(e)
+        {
+            const table = $(e.target).parent().parent().parent().parent();
+
+            table.remove();
+        }
+
+        ReIndexCategories = function(formData)
+        {
+            @* 字元 '[' 為 %5B, 字元 ']' 為 %5D  *@
+            const matchAllPattern = /Categories%5B([0-9]+)%5D/g;
+            const matchSinglePattern = /Categories%5B([0-9]+)%5D/;
+
+            const matchAllResult = formData.match(matchAllPattern);
+
+            if (matchAllResult)
+            {
+                const matchIndexes = matchAllResult
+                                      // 去重複
+                                     .filter((value, index, self) => self.indexOf(value) === index)
+                                     // 抓出 index
+                                     .map(value => value.match(matchSinglePattern)[1]);
+
+                @* 字串中間的 Index 是用來被取代的 *@
+                const indexTemplate = 'Categories%5BIndex%5D';
+                for (let i = 0 ; i < matchIndexes.length ; i ++)
+                {
+                    const originIndex = matchIndexes[i];
+                    const originIndexString = indexTemplate.replace('Index', originIndex);
+                    const newIndexString = indexTemplate.replace('Index', i);
+
+                    // console.log( originIndexString + ' > ' + newIndexString );
+
+                    formData = formData.replaceAll(originIndexString, newIndexString);
+                }
+            }
+
+            return formData;
+        }
+
+        $('form').submit(function(e) {
+            console.log(e.target);
+
+             const formData = $('form').serialize();
+
+             const requestBody = ReIndexCategories(formData);
+
+             $.ajax({
+                         url: '@Url.Action("PostStyle2")',
+                         type: 'post',
+                         data: requestBody ,
+                    })
+                .done((e) => { window.location.href = '@Url.Action("ShowStyle2")' })
+                .fail((res) => { console.log('error', res); });
+
+            e.preventDefault();
+        });
+    </script>
+}

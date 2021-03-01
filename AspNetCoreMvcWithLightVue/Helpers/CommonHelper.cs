@@ -8,5 +8,9 @@ namespace AspNetCoreMvcWithLightVue.Helpers
         {
             return JsonSerializer.Serialize(source);
         }
+        public static T ParseJson<T>(this string json)
+        {
+            return JsonSerializer.Deserialize<T>(json);
+        }
     }
 }

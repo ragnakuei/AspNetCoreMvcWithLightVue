@@ -1,6 +1,6 @@
 ﻿@model AspNetCoreMvcWithLightVue.Controllers.ComplexViewModel
 
-<h4>ComplexViewModel</h4>
+<h4>ComplexViewModel FormData 版</h4>
 <hr />
 <div>
     <input type="button"
@@ -8,7 +8,8 @@
            class="btn btn-primary"
            style="margin: 5px;"
            onclick="AddNewCategory()" />
-    <form asp-action="PostStyle1"
+    <form asp-action="ShowStyle1"
+          autocomplete="off"
           method="post">
         <div id="categories">
             @for (int i = 0; i < Model.Categories.Length; i++)
@@ -35,7 +36,7 @@
         function AddNewCategory()
         {
             $.ajax({
-                        url: '@Url.Action("Style1NewItem")',
+                        url: '@Url.Action("NewCategoryAndThreeItems")',
                         type: 'post',
                         data: { categoryIndex } ,
                     })

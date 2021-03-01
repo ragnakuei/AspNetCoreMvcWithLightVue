@@ -21,16 +21,19 @@
             {
                 <td class="align-middle" rowspan="3">
                     <input name="Categories[@categoryIndex].Name"
+                           class="form-control"
                            value="@Model.Categories[categoryIndex].Name" />
                 </td>
             }
 
             <td>
                 <input name="Categories[@categoryIndex].Items[@itemIndex].Name"
+                       class="form-control"
                        value="@Model.Categories[categoryIndex].Items[itemIndex].Name" />
             </td>
             <td>
                 <input name="Categories[@categoryIndex].Items[@itemIndex].Value"
+                       class="form-control"
                        value="@Model.Categories[categoryIndex].Items[itemIndex].Value" />
             </td>
 
@@ -38,6 +41,7 @@
              {
                  <td class="align-middle" rowspan="3">
                      <input type="button"
+                            class="btn btn-danger"
                             onclick="DeleteTable(event);"
                             value="刪除"  />
                  </td>

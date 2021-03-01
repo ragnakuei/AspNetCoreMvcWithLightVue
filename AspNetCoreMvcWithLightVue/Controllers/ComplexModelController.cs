@@ -12,7 +12,7 @@ namespace AspNetCoreMvcWithLightVue.Controllers
     {
         private readonly IHttpContextAccessor _contextAccessor;
 
-        private readonly string _viewModelSessionKey = "ComplexViewModel";
+        private readonly string _style2ViewModelKey = "ComplexViewModel";
 
         private readonly ComplexViewModel _vm
             = new ComplexViewModel
@@ -58,7 +58,7 @@ namespace AspNetCoreMvcWithLightVue.Controllers
                                                    {
                                                        Id    = 22,
                                                        Name  = "Item22",
-                                                       Value = 21m,
+                                                       Value = 22m,
                                                    },
                                                    new Item
                                                    {
@@ -88,7 +88,7 @@ namespace AspNetCoreMvcWithLightVue.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Style1NewItem(int categoryIndex)
+        public async Task<IActionResult> NewCategoryAndThreeItems(int categoryIndex)
         {
             var model = new ComplexViewModel
                         {
@@ -111,32 +111,32 @@ namespace AspNetCoreMvcWithLightVue.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostStyle1(ComplexViewModel vm)
+        public IActionResult ShowStyle1(ComplexViewModel vm)
         {
-            return View("Style1Result", vm);
+            return View("ComplexViewModel", vm);
         }
 
         [HttpGet]
         public IActionResult Style2()
         {
-            return View();
+            return View(_vm);
         }
 
         [HttpPost]
-        public IActionResult PostStyle2([FromBody]ComplexViewModel vm)
+        public IActionResult PostStyle2(ComplexViewModel vm)
         {
-            _contextAccessor.HttpContext.Session.SetString(_viewModelSessionKey, vm.ToJson());
+            _contextAccessor.HttpContext.Session.SetString(_style2ViewModelKey, vm.ToJson());
 
             return Ok(vm);
         }
 
-        [HttpGet]
-        public IActionResult Style2Result()
+        public IActionResult ShowStyle2()
         {
-            var vmJson = _contextAccessor.HttpContext.Session.GetString(_viewModelSessionKey);
-            var vm     = JsonSerializer.Deserialize<ComplexViewModel>(vmJson);
+            var vmJson = _contextAccessor.HttpContext.Session.GetString(_style2ViewModelKey);
 
-            return View(vm);
+            var vm = vmJson.ParseJson<ComplexViewModel>();
+
+            return View("ComplexViewModel", vm);
         }
     }
 
