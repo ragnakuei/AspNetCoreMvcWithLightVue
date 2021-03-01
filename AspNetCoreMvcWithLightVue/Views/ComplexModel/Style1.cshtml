@@ -1,40 +1,83 @@
 ﻿@model AspNetCoreMvcWithLightVue.Controllers.ComplexViewModel
 
-<style>
-    .custom-category-style
-    {
-        padding-top: 10px !important;
-        padding-bottom: 10px !important;
-
-        padding-left: 80px !important;
-    }
-    .form-inline
-    {
-        padding-top: 2px !important;
-        padding-bottom: 2px !important;
-    }
-</style>
-
 <h4>ComplexViewModel</h4>
 <hr />
-<div class="row">
-    <div class="col-md-8">
-        <form asp-action="PostStyle1" method="post">
+<div>
+    <input type="button"
+           value="新增"
+           class="btn btn-primary"
+           style="margin: 5px;"
+           onclick="AddNewCategory()" />
+    <form asp-action="PostStyle1"
+          method="post">
+        <div id="categories">
             @for (int i = 0; i < Model.Categories.Length; i++)
             {
-                <partial name="CategoryView"
-                         for="@Model.Categories[i]" />
+                ViewBag.CategoryIndex = (int?)i;
+
+                <partial name="CategoryView" />
+                <br />
             }
-            <div class="form-group">
-                <input type="submit"
-                       value="Save"
-                       class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="form-group">
+            <input type="submit"
+                   value="儲存"
+                   class="btn btn-primary" />
+        </div>
+    </form>
 </div>
 
 @section Scripts
 {
+    <script>
+        window.categoryIndex = @Model.Categories.Length;
 
+        function AddNewCategory()
+        {
+            $.ajax({
+                        url: '@Url.Action("Style1NewItem")',
+                        type: 'post',
+                        data: { categoryIndex } ,
+                    })
+             .done(function(e) {
+
+                        $('#categories').append(e);
+
+                        window.categoryIndex++;
+                    })
+             .fail(function(res) {
+                        console.log('error', res);
+                    });
+        }
+
+        function DeleteTable(e)
+        {
+            const table = $(e.target).parent().parent().parent().parent();
+
+            table.remove();
+        }
+    </script>
 }
+
+<style>
+    legend
+    {
+        font-size: 20px;
+    }
+    fieldset
+    {
+        margin:20px;
+    }
+    fieldset > div
+    {
+        margin:20px;
+    }
+</style>
+<fieldset >
+    <legend>說明：</legend>
+    <div>
+        <p>新增一筆，並輸入資料</p>
+        <p>再刪除中間那筆，按下儲存</p>
+        <p>就會發現最後一筆不見了 !</p>
+    </div>
+</fieldset>

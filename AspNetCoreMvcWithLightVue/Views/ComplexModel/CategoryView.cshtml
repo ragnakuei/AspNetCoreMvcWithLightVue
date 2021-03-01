@@ -1,20 +1,48 @@
-﻿@model AspNetCoreMvcWithLightVue.Controllers.Category
+﻿@model AspNetCoreMvcWithLightVue.Controllers.ComplexViewModel
+@{
+    Layout = null;
+    var categoryIndex = (ViewBag.CategoryIndex as int?).GetValueOrDefault();
+}
+<table class="table">
+    <thead>
+    <tr>
+        <th>Category</th>
+        <th>Name</th>
+        <th>Value</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
 
-<div class="form-inline">
-    <label asp-for="Id" class="control-label col-md-2"></label>
-    <input asp-for="Id" class="form-control col-md-4" />
-</div>
-<div class="form-inline">
-    <label asp-for="Name" class="control-label col-md-2"></label>
-    <input asp-for="Name" class="form-control col-md-4" />
-</div>
-<div>
-    @for (int i = 0; i < Model.SubCategories.Length; i++)
+    @for (int itemIndex = 0; itemIndex < Model.Categories[categoryIndex].Items.Length; itemIndex++)
     {
-        <div class="custom-category-style">
-            <partial name="SubCategoryView"
-                     for="@Model.SubCategories[i]" />
-        </div>
+        <tr>
+            @if (itemIndex == 0)
+            {
+                <td class="align-middle" rowspan="3">
+                    <input name="Categories[@categoryIndex].Name"
+                           value="@Model.Categories[categoryIndex].Name" />
+                </td>
+            }
+
+            <td>
+                <input name="Categories[@categoryIndex].Items[@itemIndex].Name"
+                       value="@Model.Categories[categoryIndex].Items[itemIndex].Name" />
+            </td>
+            <td>
+                <input name="Categories[@categoryIndex].Items[@itemIndex].Value"
+                       value="@Model.Categories[categoryIndex].Items[itemIndex].Value" />
+            </td>
+
+             @if (itemIndex == 0)
+             {
+                 <td class="align-middle" rowspan="3">
+                     <input type="button"
+                            onclick="DeleteTable(event);"
+                            value="刪除"  />
+                 </td>
+             }
+       </tr>
     }
-</div>
-<hr />
+    </tbody>
+</table>

@@ -1,8 +1,10 @@
-﻿using System.Text.Json;
+﻿using System.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
 using AspNetCoreMvcWithLightVue.Helpers;
-using AspNetCoreMvcWithLightVue.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using AspNetCoreMvcWithLightVue.Infra;
 
 namespace AspNetCoreMvcWithLightVue.Controllers
 {
@@ -21,71 +23,50 @@ namespace AspNetCoreMvcWithLightVue.Controllers
                                    {
                                        Id   = 1,
                                        Name = "Category1",
-                                       SubCategories = new[]
-                                                       {
-                                                           new SubCategory
-                                                           {
-                                                               Id   = 11,
-                                                               Name = "SubCategory11",
-                                                               Items = new[]
-                                                                       {
-                                                                           new Item { Id = 111, Name = "Item111", },
-                                                                           new Item { Id = 112, Name = "Item112", },
-                                                                       }
-                                                           },
-                                                           new SubCategory
-                                                           {
-                                                               Id   = 12,
-                                                               Name = "SubCategory12",
-                                                               Items = new[]
-                                                                       {
-                                                                           new Item { Id = 121, Name = "Item121", },
-                                                                           new Item { Id = 122, Name = "Item122", },
-                                                                           new Item { Id = 123, Name = "Item123", },
-                                                                       }
-                                                           },
-                                                       }
+                                       Items = new[]
+                                               {
+                                                   new Item
+                                                   {
+                                                       Id    = 11,
+                                                       Name  = "Item11",
+                                                       Value = 11m,
+                                                   },
+                                                   new Item
+                                                   {
+                                                       Id    = 12,
+                                                       Name  = "Item12",
+                                                       Value = 12m,
+                                                   },
+                                                   new Item
+                                                   {
+                                                   },
+                                               }
                                    },
                                    new Category
                                    {
                                        Id   = 2,
                                        Name = "Category2",
-                                       SubCategories = new[]
-                                                       {
-                                                           new SubCategory
-                                                           {
-                                                               Id   = 21,
-                                                               Name = "SubCategory21",
-                                                               Items = new[]
-                                                                       {
-                                                                           new Item { Id = 211, Name = "Item211", },
-                                                                           new Item { Id = 212, Name = "Item212", },
-                                                                       }
-                                                           },
-                                                           new SubCategory
-                                                           {
-                                                               Id   = 22,
-                                                               Name = "SubCategory22",
-                                                               Items = new[]
-                                                                       {
-                                                                           new Item { Id = 221, Name = "Item221", },
-                                                                           new Item { Id = 222, Name = "Item222", },
-                                                                           new Item { Id = 223, Name = "Item223", },
-                                                                       }
-                                                           },
-                                                           new SubCategory
-                                                           {
-                                                               Id   = 23,
-                                                               Name = "SubCategory23",
-                                                               Items = new[]
-                                                                       {
-                                                                           new Item { Id = 231, Name = "Item231", },
-                                                                           new Item { Id = 232, Name = "Item232", },
-                                                                           new Item { Id = 233, Name = "Item233", },
-                                                                           new Item { Id = 234, Name = "Item234", },
-                                                                       }
-                                                           },
-                                                       }
+                                       Items = new[]
+                                               {
+                                                   new Item
+                                                   {
+                                                       Id    = 21,
+                                                       Name  = "Item21",
+                                                       Value = 21m,
+                                                   },
+                                                   new Item
+                                                   {
+                                                       Id    = 22,
+                                                       Name  = "Item22",
+                                                       Value = 21m,
+                                                   },
+                                                   new Item
+                                                   {
+                                                       Id    = 23,
+                                                       Name  = "Item23",
+                                                       Value = 23m,
+                                                   },
+                                               }
                                    },
                                }
               };
@@ -104,6 +85,29 @@ namespace AspNetCoreMvcWithLightVue.Controllers
         public IActionResult Style1()
         {
             return View(_vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Style1NewItem(int categoryIndex)
+        {
+            var model = new ComplexViewModel
+                        {
+                            Categories = new[]
+                                         {
+                                             new Category
+                                             {
+                                                 Items = Enumerable.Range(0, 3)
+                                                                   .Select(i => new Item())
+                                                                   .ToArray(),
+                                             }
+                                         }
+                        };
+
+            var html = (await this.RenderViewAsync("CategoryView", model))
+               .Replace("Categories[0]",
+                        $"Categories[{categoryIndex}]");
+
+            return Ok(html);
         }
 
         [HttpPost]
@@ -147,15 +151,6 @@ namespace AspNetCoreMvcWithLightVue.Controllers
 
         public string Name { get; set; }
 
-        public SubCategory[] SubCategories { get; set; }
-    }
-
-    public class SubCategory
-    {
-        public int? Id { get; set; }
-
-        public string Name { get; set; }
-
         public Item[] Items { get; set; }
     }
 
@@ -164,5 +159,7 @@ namespace AspNetCoreMvcWithLightVue.Controllers
         public int? Id { get; set; }
 
         public string Name { get; set; }
+
+        public decimal? Value { get; set; }
     }
 }
