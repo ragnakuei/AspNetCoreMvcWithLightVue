@@ -28,6 +28,31 @@
     </form>
 </div>
 
+<style>
+    legend
+    {
+        font-size: 20px;
+    }
+    fieldset
+    {
+        margin:20px;
+    }
+    fieldset > div
+    {
+        margin:20px;
+    }
+</style>
+<fieldset >
+    <legend>說明：</legend>
+    <div>
+        新增一筆，並輸入資料<br>
+        再刪除中間那筆，按下儲存<br>
+        就會發現最後一筆不見了 !<br>
+    </div>
+</fieldset>
+
+<a href='@Url.Action("Index")'>回上一頁</a>
+
 @section Scripts
 {
     <script>
@@ -59,26 +84,3 @@
         }
     </script>
 }
-
-<style>
-    legend
-    {
-        font-size: 20px;
-    }
-    fieldset
-    {
-        margin:20px;
-    }
-    fieldset > div
-    {
-        margin:20px;
-    }
-</style>
-<fieldset >
-    <legend>說明：</legend>
-    <div>
-        <p>新增一筆，並輸入資料</p>
-        <p>再刪除中間那筆，按下儲存</p>
-        <p>就會發現最後一筆不見了 !</p>
-    </div>
-</fieldset>

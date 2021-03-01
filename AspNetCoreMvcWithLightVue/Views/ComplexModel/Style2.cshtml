@@ -28,15 +28,20 @@
     </form>
 </div>
 
+<a href='@Url.Action("Index")'>回上一頁</a>
+
 @section Scripts
 {
     <script>
         window.categoryIndex = @Model.Categories.Length;
+        window.newCategoryUrl = '@Url.Action("NewCategoryAndThreeItems")';
+        window.submitUrl = '@Url.Action("PostStyle2")';
+        window.redirectUrl = '@Url.Action("ShowStyle2")';
 
         function AddNewCategory()
         {
             $.ajax({
-                        url: '@Url.Action("NewCategoryAndThreeItems")',
+                        url: newCategoryUrl,
                         type: 'post',
                         data: { categoryIndex } ,
                     })
@@ -99,11 +104,11 @@
              const requestBody = ReIndexCategories(formData);
 
              $.ajax({
-                         url: '@Url.Action("PostStyle2")',
+                         url: submitUrl,
                          type: 'post',
                          data: requestBody ,
                     })
-                .done((e) => { window.location.href = '@Url.Action("ShowStyle2")' })
+                .done((e) => { window.location.href = redirectUrl })
                 .fail((res) => { console.log('error', res); });
 
             e.preventDefault();

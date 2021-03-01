@@ -12,7 +12,8 @@ namespace AspNetCoreMvcWithLightVue.Controllers
     {
         private readonly IHttpContextAccessor _contextAccessor;
 
-        private readonly string _style2ViewModelKey = "ComplexViewModel";
+        private readonly string _style2ViewModelKey = "ComplexViewModel2";
+private readonly string _style3ViewModelKey = "ComplexViewModel3";
 
         private readonly ComplexViewModel _vm
             = new ComplexViewModel
@@ -113,6 +114,8 @@ namespace AspNetCoreMvcWithLightVue.Controllers
         [HttpPost]
         public IActionResult ShowStyle1(ComplexViewModel vm)
         {
+            ViewBag.ReturnUrl = Url.Action("Style1");
+
             return View("ComplexViewModel", vm);
         }
 
@@ -130,11 +133,48 @@ namespace AspNetCoreMvcWithLightVue.Controllers
             return Ok(vm);
         }
 
+        [HttpGet]
         public IActionResult ShowStyle2()
         {
             var vmJson = _contextAccessor.HttpContext.Session.GetString(_style2ViewModelKey);
 
             var vm = vmJson.ParseJson<ComplexViewModel>();
+
+            ViewBag.ReturnUrl = Url.Action("Style2");
+
+            return View("ComplexViewModel", vm);
+        }
+
+        [HttpGet]
+        public IActionResult Style3()
+        {
+            ViewBag.EmptyCategoryJson = new Category
+                                    {
+                                        Items = Enumerable.Range(0, 3)
+                                                          .Select(i => new Item())
+                                                          .ToArray(),
+                                    }.ToJson();
+
+
+            return View(_vm);
+        }
+
+        [HttpPost]
+        public IActionResult PostStyle3([FromBody]ComplexViewModel vm)
+        {
+            _contextAccessor.HttpContext.Session.SetString(_style3ViewModelKey, vm.ToJson());
+
+            return Ok(vm);
+        }
+
+        [HttpGet]
+        public IActionResult ShowStyle3()
+        {
+            var vmJson = _contextAccessor.HttpContext.Session.GetString(_style3ViewModelKey);
+
+            var vm = vmJson.ParseJson<ComplexViewModel>();
+
+            ViewBag.ReturnUrl = Url.Action("Style3");
 
             return View("ComplexViewModel", vm);
         }
