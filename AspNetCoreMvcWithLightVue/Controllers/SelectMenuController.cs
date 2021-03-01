@@ -1,7 +1,5 @@
 ﻿using System.Linq;
-using System.Reflection.PortableExecutable;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using AspNetCoreMvcWithLightVue.Helpers;
 using AspNetCoreMvcWithLightVue.Infra;
 using AspNetCoreMvcWithLightVue.Models;
