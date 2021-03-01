@@ -29,6 +29,9 @@ namespace AspNetCoreMvcWithLightVue
                                         options.JsonSerializerOptions.PropertyNamingPolicy = null;
                                         options.JsonSerializerOptions.IgnoreNullValues     = true;
                                     });;
+
+            services.AddSession();
+            services.AddHttpContextAccessor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,7 +49,7 @@ namespace AspNetCoreMvcWithLightVue
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseRouting();
 
             app.UseAuthorization();
