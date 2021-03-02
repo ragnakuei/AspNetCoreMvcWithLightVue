@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Text.Json;
 using AspNetCoreMvcWithLightVue.Helpers;
 using AspNetCoreMvcWithLightVue.Infra;
 using AspNetCoreMvcWithLightVue.Models;
@@ -20,7 +19,8 @@ namespace AspNetCoreMvcWithLightVue.Controllers
                   new SelectOptionItem<int> { Value = 3, Text = "不明" },
               };
 
-        private readonly string _viewModelSessionKey = "SelectMenuViewModel";
+        private readonly string _viewModelSessionKeyStyle1 = "SelectMenuViewModelStyle1";
+        private readonly string _viewModelSessionKeyStyle2 = "SelectMenuViewModelStyle2";
 
         public SelectMenuController(IHttpContextAccessor contextAccessor)
         {
@@ -46,7 +46,7 @@ namespace AspNetCoreMvcWithLightVue.Controllers
         {
             vm.GendorName = _gendorOptions.FirstOrDefault(g => g.Value == vm.GendorId)?.Text;
 
-            _contextAccessor.HttpContext.Session.SetString(_viewModelSessionKey, vm.ToJson());
+            _contextAccessor.HttpContext.Session.SetString(_viewModelSessionKeyStyle1, vm.ToJson());
 
             return Ok(vm);
         }
@@ -54,10 +54,34 @@ namespace AspNetCoreMvcWithLightVue.Controllers
         [HttpGet]
         public IActionResult Style1Result()
         {
-            var vmJson = _contextAccessor.HttpContext.Session.GetString(_viewModelSessionKey);
+            var vmJson = _contextAccessor.HttpContext.Session.GetString(_viewModelSessionKeyStyle1);
             var vm     = vmJson.ParseJson<SelectMenuViewModel>();
 
             return View(vm);
+        }
+
+        [HttpGet]
+        public IActionResult Style2()
+        {
+            var vmJson = _contextAccessor.HttpContext.Session.GetString(_viewModelSessionKeyStyle2);
+            var vm = string.IsNullOrWhiteSpace(vmJson)
+                         ? new SelectMenuViewModel()
+                         : vmJson.ParseJson<SelectMenuViewModel>();
+
+            ViewBag.GendorOptionsJson = _gendorOptions.ToJson();
+
+            return View(vm);
+        }
+
+
+        [HttpPost]
+        public IActionResult PostStyle2([FromBody]SelectMenuViewModel vm)
+        {
+            vm.GendorName = _gendorOptions.FirstOrDefault(g => g.Value == vm.GendorId)?.Text;
+
+            _contextAccessor.HttpContext.Session.SetString(_viewModelSessionKeyStyle2, vm.ToJson());
+
+            return Ok(vm);
         }
     }
 }
