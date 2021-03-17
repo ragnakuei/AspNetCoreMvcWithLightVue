@@ -21,6 +21,7 @@ namespace AspNetCoreMvcWithLightVue.Controllers
 
         private readonly string _viewModelSessionKeyStyle1 = "SelectMenuViewModelStyle1";
         private readonly string _viewModelSessionKeyStyle2 = "SelectMenuViewModelStyle2";
+        private readonly string _viewModelSessionKeyStyle3 = "SelectMenuViewModelStyle3";
 
         public SelectMenuController(IHttpContextAccessor contextAccessor)
         {
@@ -82,6 +83,19 @@ namespace AspNetCoreMvcWithLightVue.Controllers
             _contextAccessor.HttpContext.Session.SetString(_viewModelSessionKeyStyle2, vm.ToJson());
 
             return Ok(vm);
+        }
+
+        [HttpGet]
+        public IActionResult Style3()
+        {
+            var vmJson = _contextAccessor.HttpContext.Session.GetString(_viewModelSessionKeyStyle3);
+            var vm = string.IsNullOrWhiteSpace(vmJson)
+                         ? new SelectMenuViewModel()
+                         : vmJson.ParseJson<SelectMenuViewModel>();
+
+            ViewBag.GendorOptionsJson = _gendorOptions.ToJson();
+
+            return View(vm);
         }
     }
 }

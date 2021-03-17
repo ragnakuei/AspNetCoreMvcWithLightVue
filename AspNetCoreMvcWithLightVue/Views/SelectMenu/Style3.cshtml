@@ -4,22 +4,22 @@
      style="display: none">
     <form v-on:submit.prevent="submitForm">
         <label for="GendorId">性別：</label>
-        <select id="GendorId" v-model="model.GendorId">
+        <jquery-selectmenu id="GendorId" v-model="model.GendorId">
             <option value=null disabled selected>請選擇</option>
             <option v-for="gendor in gendorOptions" :value="gendor.Value">{{gendor.Text}}</option>
-        </select><br>
-        <select id="GendorId" v-model="model.GendorId">
+        </jquery-selectmenu><br>
+        <jquery-selectmenu id="GendorId" v-model="model.GendorId">
             <option value=null disabled selected>請選擇</option>
             <option v-for="gendor in gendorOptions" :value="gendor.Value">{{gendor.Text}}</option>
-        </select><br>
-        <select id="GendorId" v-model="model.GendorId">
+        </jquery-selectmenu><br>
+        <jquery-selectmenu id="GendorId" v-model="model.GendorId">
             <option value=null disabled selected>請選擇</option>
             <option v-for="gendor in gendorOptions" :value="gendor.Value">{{gendor.Text}}</option>
-        </select><br>
-        <select id="GendorId" v-model="model.GendorId">
+        </jquery-selectmenu><br>
+        <jquery-selectmenu id="GendorId" v-model="model.GendorId">
             <option value=null disabled selected>請選擇</option>
             <option v-for="gendor in gendorOptions" :value="gendor.Value">{{gendor.Text}}</option>
-        </select><br>
+        </jquery-selectmenu><br>
 
         <input type="submit" value="送出" />
     </form>
@@ -56,7 +56,8 @@
                       const target = e.target;
 
                       $('select').each((index, item) => {
-                          if (item !== target) {
+                          if (item !== target)
+                          {
                               $(item).selectmenu("close");
                           }
                       })
@@ -87,6 +88,25 @@
             submitForm
           }
         },
+      });
+
+      app.component('jquery-selectmenu', {
+          props: ['value'],
+          template: `<select><slot /></select>`,
+          mounted: function () {
+              const emit = value => this.$emit('input', value);
+              $(this.$el).selectmenu({
+                  change: function (event, data) {
+                      emit(data.item.value);
+                  }
+              });
+              $(this.$el).val(this.value).selectmenu('refresh');
+          },
+          watch: {
+              value: function (value) {
+                  $(this.$el).val(value).selectmenu('refresh');
+              },
+          },
       });
 
       const vm = app.mount('#app');
