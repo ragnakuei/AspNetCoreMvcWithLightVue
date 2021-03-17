@@ -5,7 +5,7 @@
     <form v-on:submit.prevent="submitForm">
         <label for="GendorId">性別：</label>
         <select id="GendorId" v-model="model.GendorId">
-            <option value="" disabled selected>請選擇</option>
+            <option value=null disabled selected>請選擇</option>
             <option v-for="gendor in gendorOptions" :value="gendor.Value">{{gendor.Text}}</option>
         </select><br>
 
