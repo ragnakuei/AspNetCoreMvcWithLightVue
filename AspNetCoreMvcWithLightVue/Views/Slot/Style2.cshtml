@@ -1,8 +1,8 @@
 ﻿<div id="app"
      class="text-center"
      style="display: none">
-    <button class="btn btn-dark" @@click="showDialogA" >Toggle Dialog A</button>&nbsp
-    <button class="btn btn-dark" @@click="showDialogB" >Toggle Dialog B</button><br>
+    <button class="btn btn-dark" v-on:click="showDialogA" >Toggle Dialog A</button>&nbsp
+    <button class="btn btn-dark" v-on:click="showDialogB" >Toggle Dialog B</button><br>
     <jquery-ui-dialog v-model:is_show_dialog="isShowDialogA"
                       v-on:close_dialog="CloseDialogA">
         A

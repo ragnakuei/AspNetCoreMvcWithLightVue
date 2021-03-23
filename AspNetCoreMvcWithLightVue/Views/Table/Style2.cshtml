@@ -91,7 +91,7 @@
 <table class="table" >
   <thead>
   <tr>
-    <th v-for="column in columns" @@click="sort(column.columnEngName)">
+    <th v-for="column in columns" v-on:click="sort(column.columnEngName)">
       {{column.columnChnName}}
       <sort-icon v-if="page_info"
                  v-model:page_info="page_info"
