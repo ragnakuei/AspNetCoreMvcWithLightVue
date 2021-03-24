@@ -4,17 +4,10 @@
 <hr />
 <div id="app"
      style="display: none">
-    <input type="button"
-           value="新增"
-           class="btn btn-primary"
-           style="margin: 5px;"
-           v-on:click="AddNewCategory()" />
     <form autocomplete="off"
           v-on:submit.prevent="SubmitForm">
-        <div id="categories">
-            <table class="table"
-                   v-for="(category, categoryIndex) in vm.Categories"
-                   :key="categoryIndex">
+        <div>
+            <table class="table">
                 <thead>
                 <tr>
                     <th>Category</th>
@@ -24,35 +17,44 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(item, itemIndex) in category.Items"
-                    :key="itemIndex">
-                    <td v-if="itemIndex == 0"
-                        class="align-middle"
-                        rowspan="3">
-                        <input class="form-control"
-                               v-model="category.Name" />
-                    </td>
+                <template v-for="(category, categoryIndex) in vm.Categories"
+                          :key="categoryIndex">
 
-                    <td>
-                        <input class="form-control"
-                               v-model="item.Name" />
-                    </td>
-                    <td>
-                        <input class="form-control"
-                               v-model="item.Value" />
-                    </td>
+                    <tr v-for="(item, itemIndex) in category.Items"
+                        :key="itemIndex">
+                        <td v-if="itemIndex == 0"
+                            class="align-middle"
+                            rowspan="3">
+                            <input class="form-control"
+                                   v-model="category.Name" />
+                        </td>
 
-                    <td v-if="itemIndex == 0"
-                        class="align-middle"
-                        rowspan="3">
-                        <input type="button"
-                               class="btn btn-danger"
-                               value="刪除"
-                               v-on:click="DeleteItem(categoryIndex)" />
-                    </td>
-                </tr>
+                        <td>
+                            <input class="form-control"
+                                   v-model="item.Name" />
+                        </td>
+                        <td>
+                            <input class="form-control"
+                                   v-model="item.Value" />
+                        </td>
+
+                        <td v-if="itemIndex == 0"
+                            class="align-middle"
+                            rowspan="3">
+                            <input type="button"
+                                   class="btn btn-danger"
+                                   value="刪除"
+                                   v-on:click="DeleteItem(categoryIndex)" />
+                        </td>
+                    </tr>
+                </template>
                 </tbody>
             </table>
+            <input type="button"
+                   value="新增"
+                   class="btn btn-primary"
+                   style="margin: 5px;"
+                   v-on:click="AddNewCategory()" />
         </div>
         <div class="form-group">
             <input type="submit"
@@ -79,11 +81,16 @@
 <fieldset >
     <legend>說明：</legend>
     <div>
-        跟前一版相比，少了以下的處理： <br>
-        1. 建立 Partial View <br>
-        2. 新增時，透過 ajax 來呼叫 Partial View 來產生 Html 並回傳 <br>
-        <span style="margin-left: 14px">> 前端收到 Html 後，還要塞到指定的地方 </span><br>
-        3. submit form 時，要做 reIndex 的處理，避免 Index 不連續而導致後端收到不完整的資料 !<br>
+        跟前一版相比，少了以下的處理：
+        <br>
+        1. 建立 Partial View
+        <br>
+        2. 新增時，透過 ajax 來呼叫 Partial View 來產生 Html 並回傳
+        <br>
+        <span style="margin-left: 14px">> 前端收到 Html 後，還要塞到指定的地方 </span>
+        <br>
+        3. submit form 時，要做 reIndex 的處理，避免 Index 不連續而導致後端收到不完整的資料 !
+        <br>
     </div>
 </fieldset>
 

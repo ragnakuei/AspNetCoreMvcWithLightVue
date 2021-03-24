@@ -3,22 +3,34 @@
 <h4>ComplexViewModel FormData 版</h4>
 <hr />
 <div>
-    <input type="button"
-           value="新增"
-           class="btn btn-primary"
-           style="margin: 5px;"
-           onclick="AddNewCategory()" />
     <form asp-action="ShowStyle1"
           autocomplete="off"
           method="post">
-        <div id="categories">
-            @for (int i = 0; i < Model.Categories.Length; i++)
-            {
-                ViewBag.CategoryIndex = (int?)i;
+        <div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody id="categories">
+                @for (int i = 0; i < Model.Categories.Length; i++)
+                {
+                    ViewBag.CategoryIndex = (int?)i;
 
-                <partial name="CategoryView" />
-                <br />
-            }
+                    <partial name="CategoryView" />
+                    <br />
+                }
+                </tbody>
+            </table>
+            <input type="button"
+                   value="新增"
+                   class="btn btn-primary"
+                   style="margin: 5px;"
+                   onclick="AddNewCategory()" />
         </div>
         <div class="form-group">
             <input type="submit"
@@ -45,9 +57,12 @@
 <fieldset >
     <legend>說明：</legend>
     <div>
-        新增一筆，並輸入資料<br>
-        再刪除中間那筆，按下儲存<br>
-        就會發現最後一筆不見了 !<br>
+        新增一筆，並輸入資料
+        <br>
+        再刪除中間那筆，按下儲存
+        <br>
+        就會發現最後一筆不見了 !
+        <br>
     </div>
 </fieldset>
 
@@ -78,9 +93,11 @@
 
         function DeleteTable(e)
         {
-            const table = $(e.target).parent().parent().parent().parent();
+            const tr = $(e.target).parent().parent();
 
-            table.remove();
+            tr.next().remove();
+            tr.next().remove();
+            tr.remove();
         }
     </script>
 }

@@ -3,50 +3,40 @@
     Layout = null;
     var categoryIndex = (ViewBag.CategoryIndex as int?).GetValueOrDefault();
 }
-<table class="table">
-    <thead>
+
+@for (int itemIndex = 0; itemIndex < Model.Categories[categoryIndex].Items.Length; itemIndex++)
+{
     <tr>
-        <th>Category</th>
-        <th>Name</th>
-        <th>Value</th>
-        <th></th>
+        @if (itemIndex == 0)
+        {
+            <td class="align-middle"
+                rowspan="3">
+                <input name="Categories[@categoryIndex].Name"
+                       class="form-control"
+                       value="@Model.Categories[categoryIndex].Name" />
+            </td>
+        }
+
+        <td>
+            <input name="Categories[@categoryIndex].Items[@itemIndex].Name"
+                   class="form-control"
+                   value="@Model.Categories[categoryIndex].Items[itemIndex].Name" />
+        </td>
+        <td>
+            <input name="Categories[@categoryIndex].Items[@itemIndex].Value"
+                   class="form-control"
+                   value="@Model.Categories[categoryIndex].Items[itemIndex].Value" />
+        </td>
+
+        @if (itemIndex == 0)
+        {
+            <td class="align-middle"
+                rowspan="3">
+                <input type="button"
+                       class="btn btn-danger"
+                       onclick="DeleteTable(event);"
+                       value="刪除" />
+            </td>
+        }
     </tr>
-    </thead>
-    <tbody>
-
-    @for (int itemIndex = 0; itemIndex < Model.Categories[categoryIndex].Items.Length; itemIndex++)
-    {
-        <tr>
-            @if (itemIndex == 0)
-            {
-                <td class="align-middle" rowspan="3">
-                    <input name="Categories[@categoryIndex].Name"
-                           class="form-control"
-                           value="@Model.Categories[categoryIndex].Name" />
-                </td>
-            }
-
-            <td>
-                <input name="Categories[@categoryIndex].Items[@itemIndex].Name"
-                       class="form-control"
-                       value="@Model.Categories[categoryIndex].Items[itemIndex].Name" />
-            </td>
-            <td>
-                <input name="Categories[@categoryIndex].Items[@itemIndex].Value"
-                       class="form-control"
-                       value="@Model.Categories[categoryIndex].Items[itemIndex].Value" />
-            </td>
-
-             @if (itemIndex == 0)
-             {
-                 <td class="align-middle" rowspan="3">
-                     <input type="button"
-                            class="btn btn-danger"
-                            onclick="DeleteTable(event);"
-                            value="刪除"  />
-                 </td>
-             }
-       </tr>
-    }
-    </tbody>
-</table>
+}

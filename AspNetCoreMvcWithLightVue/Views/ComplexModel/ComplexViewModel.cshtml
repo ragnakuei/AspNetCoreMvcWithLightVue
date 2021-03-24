@@ -1,17 +1,17 @@
 ﻿@model AspNetCoreMvcWithLightVue.Controllers.ComplexViewModel
 
-@for (int categoryIndex = 0; categoryIndex < Model.Categories.Length; categoryIndex++)
-{
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Category</th>
-            <th>Name</th>
-            <th>Value</th>
-        </tr>
-        </thead>
-        <tbody>
 
+<table class="table">
+    <thead>
+    <tr>
+        <th>Category</th>
+        <th>Name</th>
+        <th>Value</th>
+    </tr>
+    </thead>
+    <tbody>
+    @for (int categoryIndex = 0; categoryIndex < Model.Categories.Length; categoryIndex++)
+    {
         @for (int itemIndex = 0; itemIndex < Model.Categories[categoryIndex].Items.Length; itemIndex++)
         {
             <tr>
@@ -31,9 +31,8 @@
                 </td>
             </tr>
         }
-        </tbody>
-    </table>
-    <br />
-}
-
+    }
+    </tbody>
+</table>
+<br />
 <a href="@ViewBag.ReturnUrl?.ToString()">回上一頁</a>
