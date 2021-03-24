@@ -112,7 +112,7 @@
               const emptyCategory = @Html.Raw(ViewBag.EmptyCategoryJson);
 
               function AddNewCategory() {
-                  vm.Categories.push(emptyCategory);
+                  vm.Categories.push(JSON.parse(JSON.stringify(emptyCategory)));
               }
 
               function DeleteItem(categoryIndex) {
