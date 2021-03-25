@@ -13,7 +13,7 @@ namespace AspNetCoreMvcWithLightVue.Controllers
         private readonly IHttpContextAccessor _contextAccessor;
 
         private readonly string _style2ViewModelKey = "ComplexViewModel2";
-private readonly string _style3ViewModelKey = "ComplexViewModel3";
+        private readonly string _style3ViewModelKey = "ComplexViewModel3";
 
         private readonly ComplexViewModel _vm
             = new ComplexViewModel
@@ -149,11 +149,11 @@ private readonly string _style3ViewModelKey = "ComplexViewModel3";
         public IActionResult Style3()
         {
             ViewBag.EmptyCategoryJson = new Category
-                                    {
-                                        Items = Enumerable.Range(0, 3)
-                                                          .Select(i => new Item())
-                                                          .ToArray(),
-                                    }.ToJson();
+                                        {
+                                            Items = Enumerable.Range(0, 3)
+                                                              .Select(i => new Item())
+                                                              .ToArray(),
+                                        }.ToJson();
 
 
             return View(_vm);

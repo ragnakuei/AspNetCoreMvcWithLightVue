@@ -1,0 +1,54 @@
+﻿@model DynamicColumnsAndRowsDto
+
+<div id="app"
+     style="display: none;">
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th v-for="column in dto.Columns">
+                {{column}}
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-if="dto?.Orders?.length > 0"
+            v-for="(order, orderIndex) in dto.Orders">
+            <td v-for="column in dto.Columns">
+                {{ order[column] }}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <a v-bind:href="returnUrl">回上一頁</a>
+</div>
+
+
+@section Scripts
+{
+    <script src="https://unpkg.com/vue@next"></script>
+
+    <script>
+      const { createApp, ref, onMounted, computed, reactive } = Vue;
+
+      const app = createApp({
+        setup() {
+
+          const dto = reactive( @Html.Raw(Model.ToJson()) );
+          const returnUrl = '@Url.Action("Style1")';
+
+          return {
+              dto,
+              returnUrl,
+          }
+        },
+      });
+
+      const vm = app.mount('#app');
+
+      window.addEventListener('DOMContentLoaded', (event) => {
+          document.getElementById("app").style.display = "block";
+      });
+    </script>
+
+}

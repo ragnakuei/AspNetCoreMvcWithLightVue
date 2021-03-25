@@ -6,8 +6,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCoreMvcWithLightVue.Repositories;
 
 namespace AspNetCoreMvcWithLightVue
 {
@@ -28,7 +30,15 @@ namespace AspNetCoreMvcWithLightVue
                                     {
                                         options.JsonSerializerOptions.PropertyNamingPolicy = null;
                                         options.JsonSerializerOptions.IgnoreNullValues     = true;
-                                    });;
+                                    });
+
+            services.AddScoped<SqlConnection>(serviceProvider =>
+                                              {
+                                                  var connectionString = Configuration.GetConnectionString("DefaultConnection");
+
+                                                  return new SqlConnection(connectionString);
+                                              });
+            services.AddScoped<NorthwindRepository>();
 
             services.AddSession();
             services.AddHttpContextAccessor();
@@ -47,6 +57,7 @@ namespace AspNetCoreMvcWithLightVue
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSession();
@@ -55,11 +66,11 @@ namespace AspNetCoreMvcWithLightVue
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
+                             {
+                                 endpoints.MapControllerRoute(
+                                                              name: "default",
+                                                              pattern: "{controller=Home}/{action=Index}/{id?}");
+                             });
         }
     }
 }

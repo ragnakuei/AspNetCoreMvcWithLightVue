@@ -1,0 +1,116 @@
+﻿@model DynamicColumnsAndRowsDto
+
+<div id="app"
+     style="display: none;">
+    <form autocomplete="off"
+          v-on:submit.prevent="Submit()">
+        <template v-for="(column, columnIndex) in showColumns">
+            <div class="form-check">
+                <input class="form-check-input"
+                       type="checkbox"
+                       v-model="dto.Columns"
+                       v-bind:id="column"
+                       v-bind:value="column">
+                <label class="form-check-label"
+                       v-bind:for="column">
+                    {{ column }}
+                </label>
+            </div>
+        </template>
+
+        <div class="form-group">
+            {{ dto.Columns }}
+        </div>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th v-for="column in dto.Columns">
+                    {{column}}
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-if="dto?.Orders?.length > 0"
+                v-for="(order, orderIndex) in dto.Orders">
+                <td v-for="column in dto.Columns">
+                    <input class="form-control"
+                           v-model="order[column]" />
+                </td>
+                <td class="align-middle">
+                    <input type="button"
+                           class="btn btn-danger"
+                           value="刪除"
+                           v-on:click="DeleteOrder(orderIndex)" />
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <input type="button"
+               value="新增"
+               class="btn btn-primary"
+               style="margin: 5px;"
+               v-on:click="AddNewOrder()" />
+        <div class="form-group">
+            <input type="submit"
+                   value="儲存"
+                   class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+@section Scripts
+{
+    <script src="https://unpkg.com/vue@next"></script>
+
+    <script>
+      const { createApp, ref, onMounted, computed, reactive } = Vue;
+
+      const app = createApp({
+        setup() {
+
+          const dto = reactive( @Html.Raw(Model.ToJson()) );
+          const showColumns = ref(@Html.Raw(Model.Columns.ToJson()));
+          const emptyOrder = @Html.Raw(ViewBag.EmptyOrderJson);
+          const submitUrl = '@Url.Action("PostStyle1")';
+          const redirectUrl = '@Url.Action("ShowStyle1")';
+
+          function AddNewOrder() {
+              dto.Orders.push(JSON.parse(JSON.stringify(emptyOrder)));
+          }
+
+          function DeleteOrder(orderIndex) {
+              dto.Orders.splice(orderIndex, 1);
+          }
+
+          function Submit(){
+                $.ajax({
+                            url: submitUrl,
+                            type: 'post',
+                            data: JSON.stringify( dto ),
+                            dataType: 'json',
+                            contentType: 'application/json',
+                       })
+                   .done((e) => { window.location.href = redirectUrl })
+                   .fail((res) => { console.log('error', res); })
+          }
+
+          return {
+              dto,
+              showColumns,
+
+              AddNewOrder,
+              DeleteOrder,
+              Submit,
+          }
+        },
+      });
+
+      const vm = app.mount('#app');
+
+      window.addEventListener('DOMContentLoaded', (event) => {
+          document.getElementById("app").style.display = "block";
+      });
+    </script>
+
+}
