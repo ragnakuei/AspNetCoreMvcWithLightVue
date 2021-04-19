@@ -2,23 +2,18 @@
 using AspNetCoreMvcWithLightVue.Helpers;
 using AspNetCoreMvcWithLightVue.Models;
 using AspNetCoreMvcWithLightVue.Repositories;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetCoreMvcWithLightVue.Controllers
 {
     public class DynamicColumnsAndRowsController : Controller
     {
-        private readonly IHttpContextAccessor _contextAccessor;
-
         private readonly NorthwindRepository _northwindRepository;
 
         private readonly string _style1ViewModelKey = "ComplexViewModel1";
 
-        public DynamicColumnsAndRowsController(IHttpContextAccessor contextAccessor,
-                                               NorthwindRepository  northwindRepository)
+        public DynamicColumnsAndRowsController(NorthwindRepository  northwindRepository)
         {
-            _contextAccessor     = contextAccessor;
             _northwindRepository = northwindRepository;
         }
 
@@ -61,7 +56,7 @@ namespace AspNetCoreMvcWithLightVue.Controllers
         [HttpPost]
         public IActionResult PostStyle1([FromBody]DynamicColumnsAndRowsDto dto)
         {
-            _contextAccessor.HttpContext.Session.SetString(_style1ViewModelKey, dto.ToJson());
+            TempData[_style1ViewModelKey] = dto.ToJson();
 
             return Ok(dto);
         }
@@ -69,7 +64,12 @@ namespace AspNetCoreMvcWithLightVue.Controllers
         [HttpGet]
         public IActionResult ShowStyle1()
         {
-            var dtoJson = _contextAccessor.HttpContext.Session.GetString(_style1ViewModelKey);
+            var dtoJson = TempData[_style1ViewModelKey]?.ToString();
+
+            if (string.IsNullOrWhiteSpace(dtoJson))
+            {
+                return RedirectToAction("Style1");
+            }
 
             ViewBag.DtoJson = dtoJson;
 
