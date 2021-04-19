@@ -30,28 +30,30 @@ namespace AspNetCoreMvcWithLightVue.Controllers
         [HttpGet]
         public IActionResult Style1()
         {
+            var columnDtos = new[]
+                             {
+                                 new ColumnDto { Name = "CustomerID", ColumnType     = "Text" },
+                                 new ColumnDto { Name = "EmployeeID", ColumnType     = "Text" },
+                                 new ColumnDto { Name = "OrderDate", ColumnType      = "Text" },
+                                 new ColumnDto { Name = "RequiredDate", ColumnType   = "Text" },
+                                 new ColumnDto { Name = "ShippedDate", ColumnType    = "Text" },
+                                 new ColumnDto { Name = "ShipVia", ColumnType        = "Text" },
+                                 new ColumnDto { Name = "Freight", ColumnType        = "Text" },
+                                 new ColumnDto { Name = "ShipName", ColumnType       = "Text" },
+                                 new ColumnDto { Name = "ShipAddress", ColumnType    = "Text" },
+                                 new ColumnDto { Name = "ShipCity", ColumnType       = "Text" },
+                                 new ColumnDto { Name = "ShipRegion", ColumnType     = "Text" },
+                                 new ColumnDto { Name = "ShipPostalCode", ColumnType = "Text" },
+                                 new ColumnDto { Name = "ShipCountry", ColumnType    = "Text" },
+                             };
+            ViewBag.ColumnsJson    = columnDtos.ToJson();
+            ViewBag.EmptyOrderJson = new NorthwindOrderDto().ToJson();
+
             var dto = new DynamicColumnsAndRowsDto
                       {
-                          Columns = new[]
-                                    {
-                                        "CustomerID",
-                                        "EmployeeID",
-                                        "OrderDate",
-                                        "RequiredDate",
-                                        "ShippedDate",
-                                        "ShipVia",
-                                        "Freight",
-                                        "ShipName",
-                                        "ShipAddress",
-                                        "ShipCity",
-                                        "ShipRegion",
-                                        "ShipPostalCode",
-                                        "ShipCountry",
-                                    },
-                          Orders = _northwindRepository.GetOrderList().Take(20),
+                          Columns = columnDtos.Select(dto => dto.Name).ToArray(),
+                          Orders  = _northwindRepository.GetOrderList().Take(20),
                       };
-
-            ViewBag.EmptyOrderJson = new NorthwindOrderDto().ToJson();
 
             return View(dto);
         }
@@ -67,11 +69,11 @@ namespace AspNetCoreMvcWithLightVue.Controllers
         [HttpGet]
         public IActionResult ShowStyle1()
         {
-            var vmJson = _contextAccessor.HttpContext.Session.GetString(_style1ViewModelKey);
+            var dtoJson = _contextAccessor.HttpContext.Session.GetString(_style1ViewModelKey);
 
-            var vm = vmJson.ParseJson<DynamicColumnsAndRowsDto>();
+            ViewBag.DtoJson = dtoJson;
 
-            return View(vm);
+            return View();
         }
     }
 }

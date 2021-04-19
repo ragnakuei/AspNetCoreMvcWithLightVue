@@ -1,19 +1,24 @@
 ﻿@model DynamicColumnsAndRowsDto
 
+<style>
+    [v-cloak] {
+        display: none;
+    }
+</style>
 <div id="app"
-     style="display: none;">
+     v-cloak>
     <form autocomplete="off"
           v-on:submit.prevent="Submit()">
-        <template v-for="(column, columnIndex) in showColumns">
+        <template v-for="(column, columnIndex) in columns">
             <div class="form-check">
                 <input class="form-check-input"
                        type="checkbox"
                        v-model="dto.Columns"
-                       v-bind:id="column"
-                       v-bind:value="column">
+                       v-bind:id="column.Name"
+                       v-bind:value="column.Name">
                 <label class="form-check-label"
-                       v-bind:for="column">
-                    {{ column }}
+                       v-bind:for="column.Name">
+                    {{ column.Name }}
                 </label>
             </div>
         </template>
@@ -25,25 +30,30 @@
         <table class="table">
             <thead>
             <tr>
-                <th v-for="column in dto.Columns">
-                    {{column}}
-                </th>
+                <template v-for="column in columns">
+                    <th v-if="ShowColumn(column.Name)">
+                        {{column.Name}}
+                    </th>
+                </template>
             </tr>
             </thead>
             <tbody>
-            <tr v-if="dto?.Orders?.length > 0"
-                v-for="(order, orderIndex) in dto.Orders">
-                <td v-for="column in dto.Columns">
-                    <input class="form-control"
-                           v-model="order[column]" />
-                </td>
-                <td class="align-middle">
-                    <input type="button"
-                           class="btn btn-danger"
-                           value="刪除"
-                           v-on:click="DeleteOrder(orderIndex)" />
-                </td>
-            </tr>
+                <tr v-for="(order, orderIndex) in dto.Orders"
+                    v-bind:key="order.OrderID">
+                    <template v-for="column in columns">
+                        <td v-if="ShowColumn(column.Name)">
+                            <input class="form-control"
+                                   v-bind:type="column.ColumnType"
+                                   v-model="order[column.Name]" />
+                        </td>
+                    </template>
+                    <td class="align-middle">
+                        <input type="button"
+                               class="btn btn-danger"
+                               value="刪除"
+                               v-on:click="DeleteOrder(orderIndex)" />
+                    </td>
+                </tr>
             </tbody>
         </table>
         <input type="button"
@@ -70,7 +80,7 @@
         setup() {
 
           const dto = reactive( @Html.Raw(Model.ToJson()) );
-          const showColumns = ref(@Html.Raw(Model.Columns.ToJson()));
+          const columns = @Html.Raw(ViewBag.ColumnsJson);
           const emptyOrder = @Html.Raw(ViewBag.EmptyOrderJson);
           const submitUrl = '@Url.Action("PostStyle1")';
           const redirectUrl = '@Url.Action("ShowStyle1")';
@@ -95,22 +105,29 @@
                    .fail((res) => { console.log('error', res); })
           }
 
+          function ShowColumn(columnName) {
+              const column = dto.Columns.find(dtoColumn => dtoColumn === columnName );
+
+              if (column) {
+                  return true;
+              }
+
+              return false;
+          }
+
           return {
               dto,
-              showColumns,
+              columns,
 
               AddNewOrder,
               DeleteOrder,
               Submit,
+              ShowColumn,
           }
         },
       });
 
       const vm = app.mount('#app');
-
-      window.addEventListener('DOMContentLoaded', (event) => {
-          document.getElementById("app").style.display = "block";
-      });
     </script>
 
 }

@@ -1,7 +1,10 @@
-﻿@model DynamicColumnsAndRowsDto
-
+﻿<style>
+    [v-cloak]{
+        display: none;
+    }
+</style>
 <div id="app"
-     style="display: none;">
+     v-cloak>
 
     <table class="table">
         <thead>
@@ -12,8 +15,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-if="dto?.Orders?.length > 0"
-            v-for="(order, orderIndex) in dto.Orders">
+        <tr v-for="(order, orderIndex) in dto.Orders">
             <td v-for="column in dto.Columns">
                 {{ order[column] }}
             </td>
@@ -34,7 +36,7 @@
       const app = createApp({
         setup() {
 
-          const dto = reactive( @Html.Raw(Model.ToJson()) );
+          const dto = reactive( @Html.Raw(ViewBag.DtoJson) );
           const returnUrl = '@Url.Action("Style1")';
 
           return {
