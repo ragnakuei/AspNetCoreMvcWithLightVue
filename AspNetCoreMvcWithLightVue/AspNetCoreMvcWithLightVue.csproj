@@ -7,7 +7,8 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.78" />
-    <PackageReference Include="KueiExtensions" Version="1.0.7" />
+    <PackageReference Include="KueiExtensions" Version="1.0.9" />
+    <PackageReference Include="KueiExtensions.System.Text.Json" Version="1.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />

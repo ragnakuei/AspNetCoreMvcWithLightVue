@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using AspNetCoreMvcWithLightVue.Helpers;
 using AspNetCoreMvcWithLightVue.Models;
+using KueiExtensions.System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetCoreMvcWithLightVue.Controllers
@@ -22,6 +24,13 @@ namespace AspNetCoreMvcWithLightVue.Controllers
 
         public IActionResult Style2()
         {
+            ViewBag.ColumnsJson = new[]
+                                  {
+                                      new { ColumnEngName = "Id", ColumnChnName   = "ID" },
+                                      new { ColumnEngName = "Name", ColumnChnName = "姓名" },
+                                      new { ColumnEngName = "Age", ColumnChnName  = "年齡" },
+                                  }.ToJson();
+
             // 手動刻 table + table column header 欄位排序
             // 清單資料以 reactive 來包裝
             // 分頁列表以 jQuery UI select menu 來呈現

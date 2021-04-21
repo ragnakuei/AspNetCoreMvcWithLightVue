@@ -1,13 +1,23 @@
-﻿<div id="app"
+﻿<style>
+  [v-cloak] {
+    display: none;
+  }
+
+  .ui-selectmenu-open{
+        max-height: 200px;
+        overflow-y: scroll;
+    }
+</style>
+<div id="app"
      class="text-center"
-     style="display: none">
+     v-cloak>
   <div>
-    <data-table v-model:data_items="page_data.data_items"
-                v-model:page_info="page_data.page_info"
+    <data-table v-model:rows="vueModel.rows"
+                v-model:page_info="vueModel.page_info"
                 v-on:sort_column="sort_column"></data-table>
-    <jquery-ui-select-menu v-if="page_data.page_info"
-                           v-model:page_info="page_data.page_info"
-                           v-on:select-value="to_page"></jquery-ui-select-menu>
+    <jquery-ui-select-menu v-if="vueModel.page_info"
+                           v-model:page_info="vueModel.page_info"
+                           v-on:select-value="to_page($event)"></jquery-ui-select-menu>
   </div>
 </div>
 
@@ -19,37 +29,44 @@
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
+  <partial name="vue/_SortColumnTable" />
+  <partial name="vue/_SortIcon" />
+
   <script>
       const { createApp, ref, onMounted, computed, reactive } = Vue;
+
+      const columns = @Html.Raw(ViewBag.ColumnsJson);
 
       const app = createApp({
         setup() {
 
-          const page_data = reactive({
-              data_items : null,
+          const vueModel = reactive({
+              rows : null,
               page_info : null,
           });
 
           const getDataTable = function() {
             axios.post('/api/Table/GetDataTable',
-                         page_data.page_info,
+                         vueModel.page_info,
                          {
                             headers: {
                               'Content-Type': 'application/json'
                             }
                          })
                  .then(response => {
-                   page_data.data_items = response.data.Data;
-                   page_data.page_info = response.data.PageInfo;
+                   vueModel.rows = response.data.Data;
+                   vueModel.page_info = response.data.PageInfo;
                  });
-          };
+          }
           const sort_column = function(columnName) {
-            page_data.page_info.ClickSortColumn = columnName;
+            vueModel.page_info.ClickSortColumn = columnName;
             getDataTable();
-          };
+          }
 
           const to_page = function(pageNo) {
-            page_data.page_info.PageNo = pageNo;
+            console.log('pageNo:' + pageNo);
+
+            vueModel.page_info.PageNo = pageNo;
             getDataTable();
           }
 
@@ -58,7 +75,7 @@
           });
 
           return {
-               page_data,
+               vueModel,
                getDataTable,
                sort_column,
                to_page,
@@ -66,80 +83,8 @@
         },
       });
 
-      app.component("data-table", {
-        props:{
-          data_items : null,
-          page_info : null,
-        },
-        setup() {
-          const columns = [
-                            { columnEngName : 'Id', columnChnName : 'ID'},
-                            { columnEngName : 'Name', columnChnName : '姓名'},
-                            { columnEngName : 'Age', columnChnName : '年齡'},
-                          ];
-
-          const sort = function(columnName) {
-                         this.$emit('sort_column', columnName);
-                       }
-
-          return {
-            columns,
-            sort,
-          };
-        },
-        template: `
-<table class="table" >
-  <thead>
-  <tr>
-    <th v-for="column in columns" v-on:click="sort(column.columnEngName)">
-      {{column.columnChnName}}
-      <sort-icon v-if="page_info"
-                 v-model:page_info="page_info"
-                 v-model:target_column="column.columnEngName" ></sort-icon>
-    </th>
-  </tr>
-  </thead>
-  <tbody>
-    <tr v-if="data_items
-           && data_items.length > 0"
-        v-for="item in data_items">
-      <td>{{item.Id}}</td>
-      <td>{{item.Name}}</td>
-      <td>{{item.Age}}</td>
-    </tr>
-  </tbody>
-</table>
-`
-      });
-
-      app.component("sort-icon", {
-        template: `
-<i :class="classObject"></i>
-`,
-        props:{
-          page_info : null,
-          target_column : null,
-        },
-        computed: {
-          classObject() {
-
-            if (this.page_info.SortColumn === this.target_column)
-            {
-              if (this.page_info.SortColumnOrder === 1)
-              {
-                return { 'bi bi-sort-up': true, }
-              }
-
-              if (this.page_info.SortColumnOrder === 0)
-              {
-                return { 'bi bi-sort-down-alt': true, }
-              }
-            }
-
-            return {};
-          }
-        }
-      });
+      app.component("data-table", SortColumnTable);
+      app.component("sort-icon", SortIcon);
 
       app.component("jquery-ui-select-menu", {
         props:{
@@ -173,8 +118,5 @@
 
       const vm = app.mount('#app');
 
-      window.addEventListener('DOMContentLoaded', (event) => {
-          document.getElementById("app").style.display = "block";
-      });
     </script>
 }

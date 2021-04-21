@@ -2,6 +2,7 @@
 using AspNetCoreMvcWithLightVue.Helpers;
 using AspNetCoreMvcWithLightVue.Infra;
 using AspNetCoreMvcWithLightVue.Models;
+using KueiExtensions.System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

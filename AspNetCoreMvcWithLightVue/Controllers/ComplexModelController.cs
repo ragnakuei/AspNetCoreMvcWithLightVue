@@ -5,6 +5,7 @@ using AspNetCoreMvcWithLightVue.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using AspNetCoreMvcWithLightVue.Infra;
+using KueiExtensions.System.Text.Json;
 
 namespace AspNetCoreMvcWithLightVue.Controllers
 {
