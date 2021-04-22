@@ -1,6 +1,6 @@
 ﻿<script>
-    window.SortIcon = {
-        template: `<i :class="classObject"></i>`,
+    app.component("sort-icon", {
+        template: `<i v-bind:class="classObject"></i>`,
         props: {
             page_info: null,
             target_column: null,
@@ -25,5 +25,5 @@
                 return {}
             }
         }
-    };
+    });
 </script>

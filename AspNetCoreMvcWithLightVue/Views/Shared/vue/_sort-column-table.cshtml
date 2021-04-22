@@ -1,5 +1,5 @@
 ﻿<script>
-    window.SortColumnTable = {
+    app.component("sort-column-table", {
         props: {
             rows: null,
             page_info: null,
@@ -41,5 +41,6 @@
                             </tbody>
                           </table>
                           `
-    };
+    });
 </script>
+<partial name="vue/_sort-icon" />
