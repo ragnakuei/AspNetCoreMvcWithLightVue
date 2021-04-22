@@ -22,6 +22,9 @@ namespace AspNetCoreMvcWithLightVue.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 全部混合運作
+        /// </summary>
         public IActionResult Style2()
         {
             ViewBag.ColumnsJson = new[]
@@ -37,7 +40,28 @@ namespace AspNetCoreMvcWithLightVue.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 獨立 js 檔運作
+        /// </summary>
         public IActionResult Style3()
+        {
+            ViewBag.ColumnsJson = new[]
+                                  {
+                                      new { ColumnEngName = "Id", ColumnChnName   = "ID" },
+                                      new { ColumnEngName = "Name", ColumnChnName = "姓名" },
+                                      new { ColumnEngName = "Age", ColumnChnName  = "年齡" },
+                                  }.ToJson();
+
+            // 手動刻 table + table column header 欄位排序
+            // 清單資料以 reactive 來包裝
+            // 分頁列表以 jQuery UI select menu 來呈現
+            return View();
+        }
+
+        /// <summary>
+        /// 使用 vue 3 loader
+        /// </summary>
+        public IActionResult Style4()
         {
             ViewBag.ColumnsJson = new[]
                                   {
