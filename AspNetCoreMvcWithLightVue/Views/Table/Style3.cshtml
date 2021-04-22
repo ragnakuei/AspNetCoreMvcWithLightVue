@@ -1,0 +1,92 @@
+﻿<style>
+  [v-cloak] {
+    display: none;
+  }
+</style>
+<div id="app"
+     class="text-center"
+     v-cloak>
+  <div>
+    <sort-column-table v-model:rows="vueModel.rows"
+                       v-model:page_info="vueModel.page_info"
+                       v-on:sort_column="sort_column"></sort-column-table>
+    <jquery-ui-select-menu v-if="vueModel.page_info"
+                           v-model:page_info="vueModel.page_info"
+                           v-on:select-value="to_page($event)"></jquery-ui-select-menu>
+  </div>
+</div>
+
+@section Scripts
+{
+  <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+  <link rel="stylesheet"
+        href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+  <script src="~/lib/vue/sort-column-table.js"></script>
+  <script src="~/lib/vue/sort-icon.js"></script>
+  <script src="~/lib/vue/jquery-ui-select-menu.js"></script>
+  <link rel="stylesheet"
+        href="~/css/vue/jquery-ui-select-menu.css">
+
+  <script>
+      const { createApp, ref, onMounted, computed, reactive } = Vue;
+
+      const columns = @Html.Raw(ViewBag.ColumnsJson);
+
+      const app = createApp({
+        setup() {
+
+          const vueModel = reactive({
+              rows : null,
+              page_info : null,
+          });
+
+          const getDataTable = function() {
+            axios.post('/api/Table/GetDataTable',
+                         vueModel.page_info,
+                         {
+                            headers: {
+                              'Content-Type': 'application/json'
+                            }
+                         })
+                 .then(response => {
+                   vueModel.rows = response.data.Data;
+                   vueModel.page_info = response.data.PageInfo;
+                 });
+          }
+          const sort_column = function(columnName) {
+            vueModel.page_info.ClickSortColumn = columnName;
+            getDataTable();
+          }
+
+          const to_page = function(pageNo) {
+            // console.log('pageNo:' + pageNo);
+
+            vueModel.page_info.PageNo = pageNo;
+            getDataTable();
+          }
+
+          onMounted(() => {
+            getDataTable();
+          });
+
+          return {
+               vueModel,
+               getDataTable,
+               sort_column,
+               to_page,
+          }
+        },
+      });
+
+    app.component("sort-column-table", sortColumnTable);
+    app.component("sort-icon", sortIcon);
+    app.component("jquery-ui-select-menu", jqueryUiSelectMenu);
+
+    const vm = app.mount('#app');
+  </script>
+}

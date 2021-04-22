@@ -37,6 +37,21 @@ namespace AspNetCoreMvcWithLightVue.Controllers
             return View();
         }
 
+        public IActionResult Style3()
+        {
+            ViewBag.ColumnsJson = new[]
+                                  {
+                                      new { ColumnEngName = "Id", ColumnChnName   = "ID" },
+                                      new { ColumnEngName = "Name", ColumnChnName = "姓名" },
+                                      new { ColumnEngName = "Age", ColumnChnName  = "年齡" },
+                                  }.ToJson();
+
+            // 手動刻 table + table column header 欄位排序
+            // 清單資料以 reactive 來包裝
+            // 分頁列表以 jQuery UI select menu 來呈現
+            return View();
+        }
+
         private readonly Dto[] _data = new[]
                                        {
                                            new Dto { Id = 1, Name   = "Name001", Age = 21, },

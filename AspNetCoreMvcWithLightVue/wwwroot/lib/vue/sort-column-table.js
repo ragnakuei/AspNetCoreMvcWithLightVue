@@ -1,0 +1,43 @@
+﻿const sortColumnTable = {
+    props: {
+        rows: null,
+        page_info: null,
+    },
+    setup() {
+
+        const sort = function (columnName) {
+            this.$emit('sort_column', columnName);
+        }
+
+        return {
+            columns,
+            sort,
+        }
+    },
+    template: `
+                          <table class="table" >
+                            <thead>
+                            <tr>
+                              <th v-for="(column, columnIndex) in columns"
+                                  v-bind:key="columnIndex"
+                                  v-on:click="sort(column.ColumnEngName)">
+                                {{column.ColumnChnName}}
+                                <sort-icon v-if="page_info"
+                                           v-model:page_info="page_info"
+                                           v-model:target_column="column.ColumnEngName" ></sort-icon>
+                              </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                              <template v-if="rows && rows.length > 0" >
+                                <tr v-for="item in rows"
+                                    v-bind:key="item?.Id">
+                                  <td v-for="column in columns" >
+                                    {{item[column?.ColumnEngName]}}
+                                  </td>
+                                </tr>
+                              </template>
+                            </tbody>
+                          </table>
+                          `
+}
