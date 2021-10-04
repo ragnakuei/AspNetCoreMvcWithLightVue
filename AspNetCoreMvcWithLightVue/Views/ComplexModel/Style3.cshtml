@@ -4,7 +4,7 @@
 <h4>ComplexViewModel 輕前端 Vue 版</h4>
 <hr />
 <div id="app"
-     style="display: none">
+     v-cloak>
     <form autocomplete="off"
           v-on:submit.prevent="SubmitForm">
         <div>
@@ -53,8 +53,7 @@
             </table>
             <input type="button"
                    value="新增"
-                   class="btn btn-primary"
-                   style="margin: 5px;"
+                   class="btn btn-primary mb-1"
                    v-on:click="AddNewCategory()" />
         </div>
         <div class="form-group">
@@ -64,34 +63,15 @@
         </div>
     </form>
 </div>
-
-<style>
-    legend
-    {
-        font-size: 20px;
-    }
-    fieldset
-    {
-        margin:20px;
-    }
-    fieldset > div
-    {
-        margin:20px;
-    }
-</style>
 <fieldset >
     <legend>說明：</legend>
     <div>
-        跟前一版相比，少了以下的處理：
-        <br>
-        1. 建立 Partial View
-        <br>
-        2. 新增時，透過 ajax 來呼叫 Partial View 來產生 Html 並回傳
-        <br>
-        <span style="margin-left: 14px">> 前端收到 Html 後，還要塞到指定的地方 </span>
-        <br>
-        3. submit form 時，要做 reIndex 的處理，避免 Index 不連續而導致後端收到不完整的資料 !
-        <br>
+        <ol style="list-style: decimal inside;">
+            跟前一版相比，少了以下的處理：
+            <li>Partial View</li>
+            <li>新增時，透過 ajax 來呼叫 Partial View 來產生 Html，再將 Html 放至指定的地方</li>
+            <li>submit form 時，要做 reIndex 的處理，避免 Index 不連續而導致後端收到不完整的資料 !</li>
+        </ol>
     </div>
 </fieldset>
 
@@ -144,8 +124,5 @@
       });
 
       const vm = app.mount("#app");
-      window.addEventListener('DOMContentLoaded', (event) => {
-        document.getElementById("app").style.display = "block";
-      });
     </script>
 }

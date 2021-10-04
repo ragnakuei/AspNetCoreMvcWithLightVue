@@ -1,13 +1,11 @@
 ﻿@model AspNetCoreMvcWithLightVue.Controllers.ComplexViewModel
 
-<h4>ComplexViewModel FormData 版</h4>
-<hr />
+<h4>ComplexViewModel Ajax + ReIndex 版</h4>
 <div>
-
     <form asp-action="ShowStyle1"
           autocomplete="off"
           method="post">
-        <div >
+        <div>
             <table class="table">
                 <thead>
                 <tr>
@@ -23,14 +21,12 @@
                     ViewBag.CategoryIndex = (int?)i;
 
                     <partial name="CategoryView" />
-                    <br />
                 }
                 </tbody>
             </table>
             <input type="button"
                    value="新增"
-                   class="btn btn-primary"
-                   style="margin: 5px;"
+                   class="btn btn-primary mb-1"
                    onclick="AddNewCategory()" />
         </div>
         <div class="form-group">
@@ -40,6 +36,19 @@
         </div>
     </form>
 </div>
+
+<fieldset >
+    <legend>說明：</legend>
+
+    <ol style="list-style: decimal inside;">
+        加上以下修改：
+        <li>submit form 改為透過 ajax post 處理</li>
+        <li>ajax post 前先做 reIndex 的動作</li>
+    </ol>
+
+    這樣就可以讓後端的正確接收到資料 !  <br>
+
+</fieldset>
 
 <a href='@Url.Action("Index")'>回上一頁</a>
 
@@ -78,7 +87,7 @@
             tr.remove();
         }
 
-        ReIndexCategories = function(formData)
+        function ReIndexCategories(formData)
         {
             @* 字元 '[' 為 %5B, 字元 ']' 為 %5D  *@
             const matchAllPattern = /Categories%5B([0-9]+)%5D/g;

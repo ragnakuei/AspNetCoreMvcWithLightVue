@@ -1,11 +1,6 @@
 ﻿@using KueiExtensions.System.Text.Json
 @model DynamicColumnsAndRowsDto
 
-<style>
-    [v-cloak] {
-        display: none;
-    }
-</style>
 <div id="app"
      v-cloak>
     <form autocomplete="off"
@@ -59,8 +54,7 @@
         </table>
         <input type="button"
                value="新增"
-               class="btn btn-primary"
-               style="margin: 5px;"
+               class="btn btn-primary mb-1"
                v-on:click="AddNewOrder()" />
         <div class="form-group">
             <input type="submit"

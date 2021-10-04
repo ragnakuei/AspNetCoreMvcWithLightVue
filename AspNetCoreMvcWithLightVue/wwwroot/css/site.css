@@ -69,3 +69,20 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+legend
+ {
+   font-size: 20px;
+ }
+fieldset
+{
+  margin:20px;
+}
+fieldset > div
+{
+  margin:20px;
+}
+
+[v-cloak] {
+  display: none;
+}

@@ -1,7 +1,6 @@
 ﻿@model AspNetCoreMvcWithLightVue.Controllers.ComplexViewModel
 
 <h4>ComplexViewModel FormData 版</h4>
-<hr />
 <div>
     <form asp-action="ShowStyle1"
           autocomplete="off"
@@ -22,14 +21,12 @@
                     ViewBag.CategoryIndex = (int?)i;
 
                     <partial name="CategoryView" />
-                    <br />
                 }
                 </tbody>
             </table>
             <input type="button"
                    value="新增"
-                   class="btn btn-primary"
-                   style="margin: 5px;"
+                   class="btn btn-primary mb-1"
                    onclick="AddNewCategory()" />
         </div>
         <div class="form-group">
@@ -39,31 +36,28 @@
         </div>
     </form>
 </div>
-
-<style>
-    legend
-    {
-        font-size: 20px;
-    }
-    fieldset
-    {
-        margin:20px;
-    }
-    fieldset > div
-    {
-        margin:20px;
-    }
-</style>
 <fieldset >
     <legend>說明：</legend>
-    <div>
-        新增一筆，並輸入資料
-        <br>
-        再刪除中間那筆，按下儲存
-        <br>
-        就會發現最後一筆不見了 !
-        <br>
-    </div>
+
+    <ol style="list-style: decimal inside;">
+        延續上次提過的：針對動態的項目，抽取成 partial view，會在二個時機點被取用
+        <li>進入頁面時，以 razor 語法呼叫</li>
+        <li>動態新增項目時，透過 ajax 取回 html 後，再放至指定的地方</li>
+    </ol>
+
+    <ol style="list-style: decimal inside;">
+        接下來經過以下的操作：
+        <li>新增一筆，並輸入資料</li>
+        <li>再刪除中間那筆</li>
+        <li>按下儲存</li>
+    </ol>
+
+    就會發現最後一筆不見了 ! <br>
+    這是一開始寫 Asp.Net MVC 最常碰到的問題 ! <br>
+    <br>
+    後端抓不到資料的原因是：因為 Model Binding 預設只能處理連續 index 的資料 ! <br>
+    下一篇用修改 index 的方式來讓  <br>
+
 </fieldset>
 
 <a href='@Url.Action("Index")'>回上一頁</a>
