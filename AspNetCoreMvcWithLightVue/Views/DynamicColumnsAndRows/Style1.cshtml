@@ -19,10 +19,6 @@
             </div>
         </template>
 
-        <div class="form-group">
-            {{ dto.Columns }}
-        </div>
-
         <table class="table">
             <thead>
             <tr>
@@ -34,22 +30,22 @@
             </tr>
             </thead>
             <tbody>
-                <tr v-for="(order, orderIndex) in dto.Orders"
-                    v-bind:key="order.OrderID">
-                    <template v-for="column in columns">
-                        <td v-if="ShowColumn(column.Name)">
-                            <input class="form-control"
-                                   v-bind:type="column.ColumnType"
-                                   v-model="order[column.Name]" />
-                        </td>
-                    </template>
-                    <td class="align-middle">
-                        <input type="button"
-                               class="btn btn-danger"
-                               value="刪除"
-                               v-on:click="DeleteOrder(orderIndex)" />
+            <tr v-for="(order, orderIndex) in dto.Orders"
+                v-bind:key="order.OrderID">
+                <template v-for="column in columns">
+                    <td v-if="ShowColumn(column.Name)">
+                        <input class="form-control"
+                               v-bind:type="column.ColumnType"
+                               v-model="order[column.Name]" />
                     </td>
-                </tr>
+                </template>
+                <td class="align-middle">
+                    <input type="button"
+                           class="btn btn-danger"
+                           value="刪除"
+                           v-on:click="DeleteOrder(orderIndex)" />
+                </td>
+            </tr>
             </tbody>
         </table>
         <input type="button"
@@ -62,6 +58,18 @@
                    class="btn btn-primary" />
         </div>
     </form>
+
+    <fieldset >
+        <legend>說明：</legend>
+
+        <ol style="list-style: decimal inside;">
+            <li>raozr 語法只負責將後端資料放至 vue 中</li>
+            <li></li>
+        </ol>
+
+    </fieldset>
+
+    <a v-bind:href='prevUrl'>回上一頁</a>
 </div>
 
 @section Scripts
@@ -75,15 +83,28 @@
         setup() {
 
           const dto = reactive( @Html.Raw(Model.ToJson()) );
+
+          // 所有可選的 column 清單
           const columns = @Html.Raw(ViewBag.ColumnsJson);
+
+          // 空的 Order 物件
           const emptyOrder = @Html.Raw(ViewBag.EmptyOrderJson);
+
+          // submit 指向的 Url
           const submitUrl = '@Url.Action("PostStyle1")';
+
+          // submit 後指向的 Url
           const redirectUrl = '@Url.Action("ShowStyle1")';
 
+          // 回上一頁的 url
+          const prevUrl = '@Url.Action("Index")';
+
+          // 新增 Order
           function AddNewOrder() {
               dto.Orders.push(JSON.parse(JSON.stringify(emptyOrder)));
           }
 
+          // 刪除 Order
           function DeleteOrder(orderIndex) {
               dto.Orders.splice(orderIndex, 1);
           }
@@ -100,6 +121,7 @@
                    .fail((res) => { console.log('error', res); })
           }
 
+          // 回傳 bool 是否要顯示該 欄位
           function ShowColumn(columnName) {
               const column = dto.Columns.find(dtoColumn => dtoColumn === columnName );
 
@@ -113,6 +135,7 @@
           return {
               dto,
               columns,
+              prevUrl,
 
               AddNewOrder,
               DeleteOrder,

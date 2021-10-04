@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using AspNetCoreMvcWithLightVue.Helpers;
+﻿using System.Collections.Generic;
+using System.Linq;
 using AspNetCoreMvcWithLightVue.Models;
 using AspNetCoreMvcWithLightVue.Repositories;
 using KueiExtensions.System.Text.Json;
@@ -13,7 +13,7 @@ namespace AspNetCoreMvcWithLightVue.Controllers
 
         private readonly string _style1ViewModelKey = "ComplexViewModel1";
 
-        public DynamicColumnsAndRowsController(NorthwindRepository  northwindRepository)
+        public DynamicColumnsAndRowsController(NorthwindRepository northwindRepository)
         {
             _northwindRepository = northwindRepository;
         }
@@ -28,19 +28,11 @@ namespace AspNetCoreMvcWithLightVue.Controllers
         {
             var columnDtos = new[]
                              {
-                                 new ColumnDto { Name = "CustomerID", ColumnType     = "Text" },
-                                 new ColumnDto { Name = "EmployeeID", ColumnType     = "Text" },
-                                 new ColumnDto { Name = "OrderDate", ColumnType      = "Text" },
-                                 new ColumnDto { Name = "RequiredDate", ColumnType   = "Text" },
-                                 new ColumnDto { Name = "ShippedDate", ColumnType    = "Text" },
-                                 new ColumnDto { Name = "ShipVia", ColumnType        = "Text" },
-                                 new ColumnDto { Name = "Freight", ColumnType        = "Text" },
-                                 new ColumnDto { Name = "ShipName", ColumnType       = "Text" },
-                                 new ColumnDto { Name = "ShipAddress", ColumnType    = "Text" },
-                                 new ColumnDto { Name = "ShipCity", ColumnType       = "Text" },
-                                 new ColumnDto { Name = "ShipRegion", ColumnType     = "Text" },
-                                 new ColumnDto { Name = "ShipPostalCode", ColumnType = "Text" },
-                                 new ColumnDto { Name = "ShipCountry", ColumnType    = "Text" },
+                                 new ColumnDto { Name = nameof(NorthwindOrderDto.CustomerID), ColumnType   = "Text" },
+                                 new ColumnDto { Name = nameof(NorthwindOrderDto.EmployeeID), ColumnType   = "Text" },
+                                 new ColumnDto { Name = nameof(NorthwindOrderDto.OrderDate), ColumnType    = "Text" },
+                                 new ColumnDto { Name = nameof(NorthwindOrderDto.RequiredDate), ColumnType = "Text" },
+                                 new ColumnDto { Name = nameof(NorthwindOrderDto.ShippedDate), ColumnType  = "Text" },
                              };
             ViewBag.ColumnsJson    = columnDtos.ToJson();
             ViewBag.EmptyOrderJson = new NorthwindOrderDto().ToJson();
@@ -48,7 +40,7 @@ namespace AspNetCoreMvcWithLightVue.Controllers
             var dto = new DynamicColumnsAndRowsDto
                       {
                           Columns = columnDtos.Select(dto => dto.Name).ToArray(),
-                          Orders  = _northwindRepository.GetOrderList().Take(20),
+                          Orders  = GetNorthwindOrderDtos(),
                       };
 
             return View(dto);
@@ -75,6 +67,18 @@ namespace AspNetCoreMvcWithLightVue.Controllers
             ViewBag.DtoJson = dtoJson;
 
             return View();
+        }
+
+        private IEnumerable<NorthwindOrderDto> GetNorthwindOrderDtos()
+        {
+            return new[]
+                   {
+                       new NorthwindOrderDto { OrderID = 1, CustomerID = "CA", EmployeeID = 1, OrderDate = "2020/12/01", RequiredDate = "2020/12/15", ShippedDate = "2020/12/10" },
+                       new NorthwindOrderDto { OrderID = 2, CustomerID = "CA", EmployeeID = 1, OrderDate = "2020/12/01", RequiredDate = "2020/12/15", ShippedDate = "2020/12/10" },
+                       new NorthwindOrderDto { OrderID = 3, CustomerID = "CB", EmployeeID = 2, OrderDate = "2020/12/02", RequiredDate = "2020/12/16", ShippedDate = "2020/12/10" },
+                       new NorthwindOrderDto { OrderID = 4, CustomerID = "CB", EmployeeID = 3, OrderDate = "2020/12/03", RequiredDate = "2020/12/17", ShippedDate = "2020/12/10" },
+                       new NorthwindOrderDto { OrderID = 5, CustomerID = "CC", EmployeeID = 1, OrderDate = "2020/11/01", RequiredDate = "2020/11/15", ShippedDate = "2020/11/10" },
+                   };
         }
     }
 }
