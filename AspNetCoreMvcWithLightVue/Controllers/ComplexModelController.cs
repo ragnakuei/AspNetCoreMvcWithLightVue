@@ -5,6 +5,7 @@ using AspNetCoreMvcWithLightVue.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using AspNetCoreMvcWithLightVue.Infra;
+using AspNetCoreMvcWithLightVue.Models;
 using KueiExtensions.System.Text.Json;
 
 namespace AspNetCoreMvcWithLightVue.Controllers
@@ -179,28 +180,5 @@ namespace AspNetCoreMvcWithLightVue.Controllers
 
             return View("ComplexViewModel", vm);
         }
-    }
-
-    public class ComplexViewModel
-    {
-        public Category[] Categories { get; set; }
-    }
-
-    public class Category
-    {
-        public int? Id { get; set; }
-
-        public string Name { get; set; }
-
-        public Item[] Items { get; set; }
-    }
-
-    public class Item
-    {
-        public int? Id { get; set; }
-
-        public string Name { get; set; }
-
-        public decimal? Value { get; set; }
     }
 }
