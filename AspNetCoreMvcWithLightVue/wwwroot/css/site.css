@@ -86,3 +86,7 @@ fieldset > div
 [v-cloak] {
   display: none;
 }
+
+.text-danger {
+  color: red;
+}

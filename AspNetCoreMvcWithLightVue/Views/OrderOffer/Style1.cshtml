@@ -1,0 +1,217 @@
+﻿@using KueiExtensions.System.Text.Json
+@model OrderOfferDto
+
+<div id="app"
+     v-cloak>
+    <form autocomplete="off"
+          v-on:submit.prevent="Submit()">
+
+        <div class="form-group col-sm-5">
+            <label for="orderDate">訂單日期：</label>
+            <input type="date"
+                   class="form-control"
+                   v-model="dto.OrderDate" />
+        </div>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>報價項目</th>
+                <th>單價</th>
+                <th>數量</th>
+                <th>總價</th>
+                <th>備註</th>
+                <th>
+                    <input type="button"
+                           value="新增"
+                           class="btn btn-primary mb-1"
+                           v-on:click="AddNewOrder()" />
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(detail, detailIndex) in dto.Details"
+                v-bind:key="detail.Guid">
+                <td>
+                    <select-options v-bind:id="'OrderItems' + detailIndex"
+                                    v-bind:options="orderItems"
+                                    v-model="detail.OrderItemGuid">
+                    </select-options>
+                </td>
+                <td>
+                    <input type="number"
+                           step="1"
+                           class="form-control text-right"
+                           v-on:blur="Calculate()"
+                           v-model="detail.UnitPrice" />
+                </td>
+                <td>
+                    <input type="number"
+                           step="1"
+                           class="form-control text-right"
+                           v-on:blur="Calculate()"
+                           v-model="detail.Count" />
+                </td>
+                <td>
+                    <input type="number"
+                           step="1"
+                           readonly
+                           class="form-control text-right"
+                           v-model="detail.SumPrice" />
+                </td>
+                <td>
+                    <input class="form-control"
+                           v-model="detail.Comment" />
+                </td>
+                <td class="align-middle">
+                    <input type="button"
+                           class="btn btn-danger"
+                           value="刪除"
+                           v-on:click="DeleteDetail(detailIndex)" />
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td class="text-right">小計：</td>
+                <td>
+                    <input readonly
+                           class="form-control text-right"
+                           v-model="dto.SubTotal" />
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td class="text-right">加值營業稅：</td>
+                <td>
+                    <input readonly
+                           class="form-control text-right"
+                           v-model="dto.BusinessTax" />
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td class="text-right">合計：</td>
+                <td>
+                    <input readonly
+                           class="form-control text-right"
+                           v-model="dto.Total" />
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="form-group">
+            <label for="orderDate">備註：</label>
+            <textarea rows="3"
+                      class="form-control"
+                      v-model="dto.Remark">
+            </textarea>
+        </div>
+        <div class="form-group">
+            <input type="submit"
+                   value="儲存"
+                   class="btn btn-primary" />
+        </div>
+    </form>
+
+    <fieldset >
+        <legend>說明：</legend>
+
+        <ol style="list-style: decimal inside;">
+            <li>移出 單價、數量 欄位後，會進行計算</li>
+            <li>未做欄位輸入驗証</li>
+        </ol>
+
+    </fieldset>
+
+    <a v-bind:href='prevUrl'>回上一頁</a>
+</div>
+
+@section Scripts
+{
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="/lib/vue/select-options.js"></script>
+
+    <script>
+      const { createApp, ref, onMounted, computed, reactive } = Vue;
+
+      const app = createApp({
+        setup() {
+
+          const dto = ref( @Html.Raw(Model.ToJson()) );
+          const orderItems = @Html.Raw(ViewBag.OrderItemsJson);
+          const emptyOrderDetail = @Html.Raw(ViewBag.EmptyOrderDetailJson);
+
+          // submit 指向的 Url
+          const submitUrl = '@Url.Action("PostStyle1")';
+
+          // submit 指向的 Url
+          const calculateUrl = '@Url.Action("Calculate")';
+
+          // submit 後指向的 Url
+          const redirectUrl = '@Url.Action("ShowStyle1")';
+
+          // 回上一頁的 url
+          const prevUrl = '@Url.Action("Index")';
+
+          // 新增 Order
+          function AddNewOrder() {
+              dto.value.Details.push(JSON.parse(JSON.stringify(emptyOrderDetail)));
+          }
+
+          // 刪除 Order
+          function DeleteDetail(detailIndex) {
+              dto.value.Details.splice(detailIndex, 1);
+          }
+
+          function Calculate() {
+              $.ajax({
+                          url: calculateUrl,
+                          type: 'post',
+                          data: JSON.stringify( dto.value ),
+                          dataType: 'json',
+                          contentType: 'application/json',
+                     })
+                 .done((e) => { dto.value = e; })
+                 .fail((res) => { console.log('error', res); })
+          }
+
+          function Submit(){
+                $.ajax({
+                            url: submitUrl,
+                            type: 'post',
+                            data: JSON.stringify( dto.value ),
+                            dataType: 'json',
+                            contentType: 'application/json',
+                       })
+                   .done((e) => { window.location.href = redirectUrl; })
+                   .fail((res) => { console.log('error', res); })
+          }
+
+          return {
+              dto,
+              orderItems,
+              prevUrl,
+
+              AddNewOrder,
+              Calculate,
+              DeleteDetail,
+              Submit,
+          }
+        },
+      });
+
+      app.component("select-options", selectOptions);
+
+      const vm = app.mount('#app');
+    </script>
+
+}
