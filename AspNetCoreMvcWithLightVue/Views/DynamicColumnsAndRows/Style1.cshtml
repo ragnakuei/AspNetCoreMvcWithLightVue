@@ -117,7 +117,7 @@
                             dataType: 'json',
                             contentType: 'application/json',
                        })
-                   .done((e) => { window.location.href = redirectUrl })
+                   .done((e) => { window.location.href = redirectUrl; })
                    .fail((res) => { console.log('error', res); })
           }
 

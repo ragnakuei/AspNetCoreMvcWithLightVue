@@ -132,7 +132,7 @@
                          type: 'post',
                          data: requestBody ,
                     })
-                .done((e) => { window.location.href = redirectUrl })
+                .done((e) => { window.location.href = redirectUrl; })
                 .fail((res) => { console.log('error', res); });
 
             e.preventDefault();
