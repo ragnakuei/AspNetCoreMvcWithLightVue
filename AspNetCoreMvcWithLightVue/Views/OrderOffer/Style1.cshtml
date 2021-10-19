@@ -153,10 +153,10 @@
           // submit 指向的 Url
           const submitUrl = '@Url.Action("PostStyle1")';
 
-          // submit 指向的 Url
+          // calculate 指向的 Url
           const calculateUrl = '@Url.Action("Calculate")';
 
-          // submit 後指向的 Url
+          // redirect Url
           const redirectUrl = '@Url.Action("ShowStyle1")';
 
           // 回上一頁的 url
@@ -170,6 +170,7 @@
           // 刪除 Order
           function DeleteDetail(detailIndex) {
               dto.value.Details.splice(detailIndex, 1);
+              Calculate();
           }
 
           function Calculate() {
