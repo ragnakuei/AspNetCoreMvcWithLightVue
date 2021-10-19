@@ -10,11 +10,11 @@
                 <input class="form-check-input"
                        type="checkbox"
                        v-model="dto.Columns"
-                       v-bind:id="column.Name"
-                       v-bind:value="column.Name">
+                       v-bind:id="column"
+                       v-bind:value="column">
                 <label class="form-check-label"
-                       v-bind:for="column.Name">
-                    {{ column.Name }}
+                       v-bind:for="column">
+                    {{ column }}
                 </label>
             </div>
         </template>
@@ -23,8 +23,8 @@
             <thead>
             <tr>
                 <template v-for="column in columns">
-                    <th v-if="ShowColumn(column.Name)">
-                        {{column.Name}}
+                    <th v-if="ShowColumn(column)">
+                        {{column}}
                     </th>
                 </template>
             </tr>
@@ -33,10 +33,10 @@
             <tr v-for="(order, orderIndex) in dto.Orders"
                 v-bind:key="order.OrderID">
                 <template v-for="column in columns">
-                    <td v-if="ShowColumn(column.Name)">
+                    <td v-if="ShowColumn(column)">
                         <input class="form-control"
-                               v-bind:type="column.ColumnType"
-                               v-model="order[column.Name]" />
+                               type="text"
+                               v-model="order[column]" />
                     </td>
                 </template>
                 <td class="align-middle">
@@ -64,7 +64,8 @@
 
         <ol style="list-style: decimal inside;">
             <li>raozr 語法只負責將後端資料放至 vue 中</li>
-            <li></li>
+            <li>可動態勾選要顯示的欄位</li>
+            <li>儲存後，可一併將勾選的欄位送至後端</li>
         </ol>
 
     </fieldset>

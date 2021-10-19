@@ -9,14 +9,7 @@ namespace AspNetCoreMvcWithLightVue.Controllers
 {
     public class DynamicColumnsAndRowsController : Controller
     {
-        private readonly NorthwindRepository _northwindRepository;
-
         private readonly string _style1ViewModelKey = "ComplexViewModel1";
-
-        public DynamicColumnsAndRowsController(NorthwindRepository northwindRepository)
-        {
-            _northwindRepository = northwindRepository;
-        }
 
         public IActionResult Index()
         {
@@ -28,18 +21,18 @@ namespace AspNetCoreMvcWithLightVue.Controllers
         {
             var columnDtos = new[]
                              {
-                                 new ColumnDto { Name = nameof(NorthwindOrderDto.CustomerID), ColumnType   = "Text" },
-                                 new ColumnDto { Name = nameof(NorthwindOrderDto.EmployeeID), ColumnType   = "Text" },
-                                 new ColumnDto { Name = nameof(NorthwindOrderDto.OrderDate), ColumnType    = "Text" },
-                                 new ColumnDto { Name = nameof(NorthwindOrderDto.RequiredDate), ColumnType = "Text" },
-                                 new ColumnDto { Name = nameof(NorthwindOrderDto.ShippedDate), ColumnType  = "Text" },
+                                 nameof(NorthwindOrderDto.CustomerID),
+                                 nameof(NorthwindOrderDto.EmployeeID),
+                                 nameof(NorthwindOrderDto.OrderDate),
+                                 nameof(NorthwindOrderDto.RequiredDate),
+                                 nameof(NorthwindOrderDto.ShippedDate),
                              };
             ViewBag.ColumnsJson    = columnDtos.ToJson();
             ViewBag.EmptyOrderJson = new NorthwindOrderDto().ToJson();
 
             var dto = new DynamicColumnsAndRowsDto
                       {
-                          Columns = columnDtos.Select(dto => dto.Name).ToArray(),
+                          Columns = columnDtos.Select(dto => dto).ToArray(),
                           Orders  = GetNorthwindOrderDtos(),
                       };
 
