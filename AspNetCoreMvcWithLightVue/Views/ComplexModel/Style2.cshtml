@@ -2,9 +2,7 @@
 
 <h4>ComplexViewModel Ajax + ReIndex 版</h4>
 <div>
-    <form asp-action="ShowStyle1"
-          autocomplete="off"
-          method="post">
+    <form autocomplete="off">
         <div>
             <table class="table">
                 <thead>
@@ -123,17 +121,17 @@
         $('form').submit(function(e) {
             console.log(e.target);
 
-             const formData = $('form').serialize();
+            const formData = $('form').serialize();
 
-             const requestBody = ReIndexCategories(formData);
+            const requestBody = ReIndexCategories(formData);
 
-             $.ajax({
-                         url: submitUrl,
-                         type: 'post',
-                         data: requestBody ,
-                    })
-                .done((e) => { window.location.href = redirectUrl; })
-                .fail((res) => { console.log('error', res); });
+            $.ajax({
+                        url: submitUrl,
+                        type: 'post',
+                        data: requestBody ,
+                   })
+              .done((e) => { window.location.href = redirectUrl; })
+              .fail((res) => { console.log('error', res); });
 
             e.preventDefault();
         });
